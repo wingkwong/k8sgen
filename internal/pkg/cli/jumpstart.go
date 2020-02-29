@@ -1,11 +1,8 @@
 package cli
 
 import (
-	"errors"
-	"fmt"
-
+	"github.com/k8sgen/internal/pkg/cli/jumpstart"
 	"github.com/spf13/cobra"
-	"github.com/wingkwong/k8sgen/internal/pkg/cli/jumpstart"
 )
 
 func BuildJumpStartCmd() *cobra.Command {

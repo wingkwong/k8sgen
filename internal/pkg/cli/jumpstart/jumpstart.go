@@ -1,7 +1,7 @@
 package jumpstart
 
 import (
-	"github.com/wingkwong/k8sgen/internal/pkg/cli"
+	"github.com/k8sgen/internal/pkg/cli"
 )
 
 type DploymentCmdOpts struct {
