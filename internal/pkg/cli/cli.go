@@ -1,5 +1,11 @@
 package cli
 
+import (
+	"os"
+	"github.com/k8sgen/third_party/term/prompt"
+	"github.com/spf13/cobra"
+)
+
 type GlobalOpts struct {
 	prompt prompter
 }
