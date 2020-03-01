@@ -10,6 +10,13 @@ type GlobalOpts struct {
 	prompt prompter
 }
 
+type DeploymentCmdOpts struct {
+	deploymentName string
+	imageName string
+	outputFormat string
+	outputPath string
+}
+
 func NewGlobalOpts() *GlobalOpts {
 	return &GlobalOpts{
 		prompt: prompt.New(),

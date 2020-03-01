@@ -6,13 +6,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type DeploymentCmdOpts struct {
-	deploymentName string
-	imageName string
-	outputFormat string
-	outputPath string
-}
-
 type jumpStartVars struct {
 	*GlobalOpts
 	DeploymentCmdOpts
