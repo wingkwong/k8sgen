@@ -70,16 +70,30 @@ func (o *jumpStartOpts) AskOutputPath() error {
 		return fmt.Errorf("Prompt for output path: %w", err)
 	}
 
-	if err := VerifyDirectory(outputPath); err != nil {
-		return fmt.Errorf("Failed to verify directory: %w", err)
-	}
+	// if err := VerifyDirectory(outputPath); err != nil {
+	// 	return fmt.Errorf("Failed to verify directory: %w", err)
+	// }
 
 	o.outputPath = outputPath
 	return nil
 }
 
 func (o *jumpStartOpts) ExecuteDeploymentCmd() error {
-	
+// 	Options:
+//       --allow-missing-template-keys=true: If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to golang and jsonpath output formats.
+//       --dry-run=false: If true, only print the object that would be sent, without sending it.
+//       --generator='': The name of the API generator to use.
+//       --image=[]: Image name to run.
+//   -o, --output='': Output format. One of: json|yaml|name|go-template|go-template-file|template|templatefile|jsonpath|jsonpath-file.
+//       --save-config=false: If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+//       --template='': Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+//       --validate=true: If true, use a schema to validate the input before sending it
+
+	cmd := fmt.Sprintf("kubectl create deployment %s --image=%s --output=%s > %s", o.deploymentName, o.imageName, o.outputFormat, o.outputPath)
+
+	if err := ExecCmd(cmd); err != nil {
+		return fmt.Errorf("Failed To execute command `%s` \n %w", cmd, err)
+	}
 
 	return nil
 }
