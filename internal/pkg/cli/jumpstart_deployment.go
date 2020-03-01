@@ -1,4 +1,8 @@
-package jumpstart
+package cli
+
+import (
+	"fmt"
+)
 
 const (
 	inputDeploymentNamePrompt = "What deployment you want to name?"
@@ -74,7 +78,7 @@ func (o *jumpStartOpts) ExecuteDeploymentCmdOpts() error {
 	return nil
 }
 
-func ExecuteClusterRoleCmd(o *jumpStartOpts) error {
+func (o *jumpStartOpts)ExecuteClusterRoleCmd() error {
 	if err := o.AskDeploymentCmdOpts(); err != nil {
 		return err
 	}
