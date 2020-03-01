@@ -39,7 +39,7 @@ const (
 	yamlName           = "yaml"
 	nameName           = "name"
 	goTemplateName     = "go-template"
-	goTemplateFileName = "go-template-file,"
+	goTemplateFileName = "go-template-file"
 	templateName       = "template"
 	templateFileName   = "templatefile"
 	jsonPathName       = "jsonpath"
