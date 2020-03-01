@@ -58,8 +58,8 @@ func (o *jumpStartOpts) askKindName() error {
 
 func (o *jumpStartOpts) Execute() error {
 	switch o.KindName {
-		case clusterRoleName:
-			if err := o.ExecuteClusterRoleCmd(); err != nil {
+		case deploymentName:
+			if err := o.ExecuteJumpStartDeploymentCmd(); err != nil {
 				return err
 			}
 		default:
@@ -75,7 +75,7 @@ func BuildJumpStartCmd() *cobra.Command {
 	}
 	cmd := &cobra.Command{
 		Use:   "jumpstart",
-		Short: "Jumpstart your Kubenetes resources",
+		Short: "Jumpstart your Kubernetes Resources",
 		Example: `
   $ k8sgen jumpstart`,
 		RunE: runCmdE(func(cmd *cobra.Command, args []string) error {
