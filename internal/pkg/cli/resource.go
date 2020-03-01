@@ -37,13 +37,13 @@ const (
 const (
 	jsonName           = "json"
 	yamlName           = "yaml"
-	nameName           = "name"
-	goTemplateName     = "go-template"
-	goTemplateFileName = "go-template-file"
-	templateName       = "template"
-	templateFileName   = "templatefile"
-	jsonPathName       = "jsonpath"
-	jsonPathFileName   = "jsonpath-file"
+	// nameName           = "name"
+	// goTemplateName     = "go-template"
+	// goTemplateFileName = "go-template-file"
+	// templateName       = "template"
+	// templateFileName   = "templatefile"
+	// jsonPathName       = "jsonpath"
+	// jsonPathFileName   = "jsonpath-file"
 )
 
 func getKindNames() []string {
@@ -69,12 +69,12 @@ func getOutputFormats() []string {
 	return []string{
 		jsonName,
 		yamlName,
-		nameName,
-		goTemplateName,
-		goTemplateFileName,
-		templateName,
-		templateFileName,
-		jsonPathName,
-		jsonPathFileName,
+		// nameName,
+		// goTemplateName,
+		// goTemplateFileName,
+		// templateName,
+		// templateFileName,
+		// jsonPathName,
+		// jsonPathFileName,
 	}
 }
