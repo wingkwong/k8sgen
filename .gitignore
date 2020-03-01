@@ -17,3 +17,6 @@
 ### Go Patch ###
 /vendor/
 /Godeps/
+
+## Build
+/bin
