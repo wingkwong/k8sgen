@@ -15,7 +15,7 @@ type DploymentCmdOpts struct {
 
 type jumpStartVars struct {
 	*GlobalOpts
-	*DploymentCmdOpts
+	DploymentCmdOpts
 	KindName          string
 }
 
