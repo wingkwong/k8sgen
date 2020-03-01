@@ -36,6 +36,7 @@ func (o *jumpStartOpts) AskDeploymentName() error {
 	if err != nil {
 		return fmt.Errorf("Prompt for deployment name: %w", err)
 	}
+	
 	o.deploymentName = deploymentName
 
 	return nil
@@ -72,18 +73,18 @@ func (o *jumpStartOpts) AskOutputPath() error {
 	return nil
 }
 
-func (o *jumpStartOpts) ExecuteDeploymentCmdOpts() error {
+func (o *jumpStartOpts) ExecuteDeploymentCmd() error {
 	//TODO:
-
+	fmt.Errorf("hhere: %w", "test")
 	return nil
 }
 
-func (o *jumpStartOpts)ExecuteClusterRoleCmd() error {
+func (o *jumpStartOpts) ExecuteJumpStartDeploymentCmd() error {
 	if err := o.AskDeploymentCmdOpts(); err != nil {
 		return err
 	}
 
-	if err := o.ExecuteDeploymentCmdOpts(); err != nil {
+	if err := o.ExecuteDeploymentCmd(); err != nil {
 		return err
 	}
 
