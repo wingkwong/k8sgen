@@ -32,9 +32,7 @@ func (o *jumpStartOpts) AskDeploymentCmdOpts() error {
 }
 
 func (o *jumpStartOpts) AskDeploymentName() error {
-	// TODO: Add regex to check deployment name: [a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*
-
-	deploymentName, err := o.prompt.Get(inputDeploymentNamePrompt, "", nil /*no validation*/)
+	deploymentName, err := o.prompt.Get(inputDeploymentNamePrompt, "", validateDeploymentName)
 
 	if err != nil {
 		return fmt.Errorf("Prompt for deployment name: %w", err)
