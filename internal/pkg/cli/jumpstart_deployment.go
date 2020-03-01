@@ -33,6 +33,7 @@ func (o *jumpStartOpts) AskDeploymentCmdOpts() error {
 
 func (o *jumpStartOpts) AskDeploymentName() error {
 	deploymentName, err := o.prompt.Get(inputDeploymentNamePrompt, "", nil /*no validation*/)
+
 	if err != nil {
 		return fmt.Errorf("Prompt for deployment name: %w", err)
 	}
@@ -68,14 +69,18 @@ func (o *jumpStartOpts) AskOutputPath() error {
 	if err != nil {
 		return fmt.Errorf("Prompt for output path: %w", err)
 	}
-	o.outputPath = outputPath
 
+	if err := VerifyDirectory(outputPath); err != nil {
+		return fmt.Errorf("Failed to verify directory: %w", err)
+	}
+
+	o.outputPath = outputPath
 	return nil
 }
 
 func (o *jumpStartOpts) ExecuteDeploymentCmd() error {
-	//TODO:
-	fmt.Errorf("hhere: %w", "test")
+	
+
 	return nil
 }
 
