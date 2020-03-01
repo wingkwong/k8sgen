@@ -79,6 +79,10 @@ func BuildJumpStartCmd() *cobra.Command {
 		Example: `
   $ k8sgen jumpstart`,
 		RunE: runCmdE(func(cmd *cobra.Command, args []string) error {
+			if err := VerifyCmd("kubectl"); err != nil {
+				return fmt.Errorf("kubectl is not installed")
+			}
+
 			opts, err := newJumpStartOpts(vars)
 			if err != nil {
 				return err
