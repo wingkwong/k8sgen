@@ -18,3 +18,11 @@ func VerifyCmd(cmd string) error {
 	}
 	return nil
 }
+
+func ExecCmd(cmd string) error {
+	if _, err := exec.Command("bash", "-c", cmd).Output(); err != nil {
+		return err
+	}
+	
+	return nil
+}
