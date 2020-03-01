@@ -3,7 +3,7 @@ package cli
 const (
 	clusterRoleName         = "ClusterRole"
 	clusterRoleBindingName  = "ClusterRoleBinding"
-	configmapName           = "Configmap"
+	configmapName           = "ConfigMap"
 	deploymentName          = "Deployment"
 	jobName                 = "Job"
 	namespaceName           = "Namespace"
