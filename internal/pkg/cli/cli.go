@@ -1,20 +1,56 @@
 package cli
 
 import (
-	"os"
 	"github.com/k8sgen/third_party/term/prompt"
 	"github.com/spf13/cobra"
+	"os"
 )
 
 type GlobalOpts struct {
+	// Global Prompter
 	prompt prompter
+	// Output Format: json / yaml
+	outputFormat string
+	// Output Directory where a resource file is saved
+	outputPath string
 }
 
 type DeploymentCmdOpts struct {
+	// Name of the Deployment
 	deploymentName string
+	// Name of the image
 	imageName string
-	outputFormat string
-	outputPath string
+}
+
+type SecretCmdOpts struct {
+	// Type of Secret
+	secretCmdName string
+	// Name of Secret to-be-created
+	secretName string
+	// Server location for Docker registry
+	dockerServer string
+	// Username for Docker registry authentication
+	dockerUserName string
+	// Password for Docker registry authentication
+	dockerUserPassword string
+	// Email for Docker registry
+	dockerEmail string
+	// Key files can be specified using their file path, in which case a default name will be given to them
+	// or optionally with a name and file path, in which case the given name will be used
+	// Specifying a directory will iterate each named file in the directory that is a valid secret key
+	fromFile string
+	// Append a hash of the secret to its name
+	appendHash bool
+	// Secret cert path
+	certPath string
+	// Secret key path
+	keyPath string
+	// Generic Options
+	secretGenericOpt string
+	// Secret from Literal input
+	fromLiteral string
+	// Secret from environment file
+	fromEnvFile string
 }
 
 func NewGlobalOpts() *GlobalOpts {
