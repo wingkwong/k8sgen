@@ -1,8 +1,8 @@
 package cli
 
 import (
-	"fmt"
 	"errors"
+	"fmt"
 	"github.com/spf13/cobra"
 )
 
@@ -56,7 +56,7 @@ func (o *createOpts) Execute() error {
 			return err
 		}
 	default:
-		return fmt.Errorf("No execution available for kind: %s", o.KindName)	
+		return fmt.Errorf("No execution available for kind: %s", o.KindName)
 	}
 
 	return nil

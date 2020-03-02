@@ -30,7 +30,7 @@ func (o *createOpts) AskDeploymentName() error {
 	if err != nil {
 		return fmt.Errorf("Prompt for deployment name: %w", err)
 	}
-	
+
 	o.deploymentName = deploymentName
 
 	return nil
@@ -72,7 +72,7 @@ func (o *createOpts) ExecuteDeploymentCmd() error {
 	return nil
 }
 
-func (o *createOpts)  ExecuteCreateDeploymentCmd() error{
+func (o *createOpts) ExecuteCreateDeploymentCmd() error {
 	if err := o.AskDeploymentCmdOpts(); err != nil {
 		return err
 	}

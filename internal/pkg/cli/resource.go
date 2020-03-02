@@ -35,8 +35,8 @@ const (
 )
 
 const (
-	jsonName           = "json"
-	yamlName           = "yaml"
+	jsonName = "json"
+	yamlName = "yaml"
 	// nameName           = "name"
 	// goTemplateName     = "go-template"
 	// goTemplateFileName = "go-template-file"
