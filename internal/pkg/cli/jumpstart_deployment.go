@@ -13,11 +13,7 @@ func (o *jumpStartOpts) AskDeploymentCmdOpts() error {
 		return err
 	}
 
-	if err := o.AskOutputFormat(); err != nil {
-		return err
-	}
-
-	if err := o.AskOutputPath(); err != nil {
+	if err := o.AskOutputInfo(); err != nil {
 		return err
 	}
 
