@@ -9,6 +9,8 @@ import (
 type jumpStartVars struct {
 	*GlobalOpts
 	DeploymentCmdOpts
+	SecretCmdOpts
+
 	KindName string
 }
 
