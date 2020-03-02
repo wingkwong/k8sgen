@@ -5,28 +5,32 @@ import (
 	"fmt"
 	"regexp"
 )
-var (
-	errValueEmpty        = errors.New("value must not be empty")
-	errValueTooLong      = errors.New("value must not exceed 255 characters")
-	errValueNotAString   = errors.New("value must be a string")
-	errValueBadFormat = errors.New("value must be a valid deployment name")
+
+const (
+	dns1123LabelFmt       = "[a-z0-9]([-a-z0-9]*[a-z0-9])?"
+	dns1123LabelMaxLength = 63
 )
 
+var (
+	errValueEmpty      = errors.New("value must not be empty")
+	errValueTooLong    = errors.New("value must not exceed 255 characters")
+	errValueNotAString = errors.New("value must be a string")
+	errValueDNS1123    = errors.New("a DNS-1123 label must consist of lower case alphanumeric characters or '-', and must start and end with an alphanumeric character")
+	dns1123LabelRegexp = regexp.MustCompile("^" + dns1123LabelFmt + "$")
+)
 
 func validateDeploymentName(val interface{}) error {
 	if err := basicNameValidation(val); err != nil {
 		return fmt.Errorf("deployment name %v is invalid: %w", val, err)
 	}
 
-	// TODO: check regex
-	valid, err := regexp.MatchString(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*`, val.(string))
-	
-	if err != nil  {
-		return errValueBadFormat
+	s, _ := val.(string)
+
+	if len(s) > dns1123LabelMaxLength {
+		return errors.New(fmt.Sprintf("must be no more than %d characters", dns1123LabelMaxLength))
 	}
-	
-	if !valid {
-		return errValueBadFormat
+	if !dns1123LabelRegexp.MatchString(s) {
+		return errValueDNS1123
 	}
 
 	return nil
