@@ -68,7 +68,7 @@ spec:
 status: {}
 ```
 
-``k8sgen create`` - create a resource file from scratch 
+``k8sgen create`` - create a complex resource file from scratch 
 
 TBC
 
@@ -78,3 +78,7 @@ The k8sgen project adheres to the [CNCF Code of
 Conduct](https://github.com/cncf/foundation/blob/master/code-of-conduct.md).
 
 We welcome community contributions and pull requests.
+
+## License 
+
+MIT
