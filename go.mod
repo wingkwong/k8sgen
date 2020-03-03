@@ -1,4 +1,4 @@
-module github.com/k8sgen
+module github.com/wingkwong/k8sgen
 
 go 1.14
 
