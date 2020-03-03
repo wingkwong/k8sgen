@@ -13,3 +13,6 @@ env:
 
 git:
   depth: false
+
+notifications:
+  email: false
