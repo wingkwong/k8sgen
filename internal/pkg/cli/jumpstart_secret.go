@@ -67,7 +67,7 @@ func (o *jumpStartOpts) AskSecretCmdOpts() error {
 		return fmt.Errorf("No available Secret option: %s", o.secretCmdName)
 	}
 
-	if err := o.AskOutputPath(); err != nil {
+	if err := o.AskOutputInfo(); err != nil {
 		return err
 	}
 
@@ -76,16 +76,12 @@ func (o *jumpStartOpts) AskSecretCmdOpts() error {
 
 func (o *jumpStartOpts) ExecuteSecretCmd() error {
 
+	var cmd string
+
 	switch o.secretCmdName {
 	case dockerRegistryCmdName:
-		cmd := fmt.Sprintf("kubectl create secret docker-registry %s --docker-server=%s --docker-username=%s --docker-password=%s --docker-email=%s --output=%s--dry-run=true > %s", o.secretName, o.dockerServer, o.dockerUserName, o.dockerUserPassword, o.dockerEmail, o.outputFormat, o.outputPath)
-
-		if err := ExecCmd(cmd); err != nil {
-			return fmt.Errorf("Failed To execute command `%s` \n %w", cmd, err)
-		}
-
+		cmd = fmt.Sprintf("kubectl create secret docker-registry %s --docker-server=%s --docker-username=%s --docker-password=%s --docker-email=%s --output=%s--dry-run=true > %s", o.secretName, o.dockerServer, o.dockerUserName, o.dockerUserPassword, o.dockerEmail, o.outputFormat, o.outputPath)
 	case genericCmdName:
-		var cmd string
 		cmd = fmt.Sprintf("kubectl create secret generic %s ", o.secretName)
 
 		for i := 0; i < o.noOfFromFileIteration; i++ {
@@ -99,15 +95,17 @@ func (o *jumpStartOpts) ExecuteSecretCmd() error {
 		if len(o.fromLiteral) == 0 && len(o.fromFile) == 0 && o.fromEnvFile != "" {
 			cmd = cmd + fmt.Sprintf("--from-env-file=%s ", o.fromEnvFile)
 		}
-	case tlsCmdName:
-		cmd := fmt.Sprintf("kubectl create secret tls %s --cert=%s --key=%s --output=%s --dry-run=true > %s", o.secretName, o.certPath, o.keyPath, o.outputFormat, o.outputPath)
 
-		if err := ExecCmd(cmd); err != nil {
-			return fmt.Errorf("Failed To execute command `%s` \n %w", cmd, err)
-		}
+		cmd = cmd + fmt.Sprintf("--output=%s > %s", o.fromEnvFile, o.outputFormat, o.outputPath)
+	case tlsCmdName:
+		cmd = fmt.Sprintf("kubectl create secret tls %s --cert=%s --key=%s --output=%s --dry-run=true > %s", o.secretName, o.certPath, o.keyPath, o.outputFormat, o.outputPath)
 
 	default:
 		return fmt.Errorf("No execution available for Secret: %s", o.secretCmdName)
+	}
+
+	if err := ExecCmd(cmd); err != nil {
+		return fmt.Errorf("Failed To execute command `%s` \n %w", cmd, err)
 	}
 
 	return nil
