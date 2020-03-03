@@ -1,9 +1,10 @@
 package cli
 
 import (
-	"github.com/k8sgen/third_party/term/prompt"
-	"github.com/spf13/cobra"
 	"os"
+
+	"github.com/spf13/cobra"
+	"github.com/wingkwong/k8sgen/third_party/term/prompt"
 )
 
 type GlobalOpts struct {

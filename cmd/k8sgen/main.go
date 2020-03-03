@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/k8sgen/internal/pkg/cli"
 	"os"
+
+	"github.com/wingkwong/k8sgen/internal/pkg/cli"
 
 	"github.com/spf13/cobra"
 )
