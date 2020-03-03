@@ -19,7 +19,7 @@ const (
 	inputFromLiteralPrompt             = "Input a key-value pair secret (e.g foo='bar'):"
 	inputFromEnvFilePrompt             = "Where is the env file path?"
 	inputNoOfFromFileIterationPrompt   = "How many from-file iterations for your input?"
-	inputNoOfFromLiteralterationPrompt = "How many from-literal iterations for your input?"
+	inputNoOfFromLiteralIterationPrompt = "How many from-literal iterations for your input?"
 
 	// select
 	inputOutputFormatPrompt  = "Please select an output format:"
