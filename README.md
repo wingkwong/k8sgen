@@ -2,7 +2,7 @@
 
 k8sgen is an utility which is designed to guide users to build their Kubernetes resources in an interactive CLI. 
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![Stability:Experimental](https://img.shields.io/badge/stability-experimental-orange)
 
 ## Usage
 
@@ -71,3 +71,10 @@ status: {}
 ``k8sgen create`` - create a resource file from scratch 
 
 TBC
+
+## Contributing
+
+The k8sgen project adheres to the [CNCF Code of
+Conduct](https://github.com/cncf/foundation/blob/master/code-of-conduct.md).
+
+We welcome community contributions and pull requests.
