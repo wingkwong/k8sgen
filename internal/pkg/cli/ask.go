@@ -2,26 +2,28 @@ package cli
 
 import (
 	"fmt"
+	"strconv"
 )
 
 const (
 	// text input
-	inputDeploymentNamePrompt     = "What deployment you want to name?"
-	inputImageNamePrompt          = "What image you want to name to run?"
-	inputOutputPathPrompt         = "What directory you want to save?"
-	inputSecretNamePrompt         = "What secret you want to name?"
-	inputDockerServerNamePrompt   = "What docker server you want to name?"
-	inputDockerUserNamePrompt     = "What is the username for Docker registry authentiation?"
-	inputDockerUserPasswordPrompt = "What is the password for Docker registry authentiation?"
-	inputDockerEmailPrompt        = "What is the email address for Docker registry?"
-	inputFromFilePrompt           = "Input key names from file"
-	inputFromLiteralPrompt        = "Input a key-value pair secret: (e.g foo='bar')"
-	inputFromEnvFilePrompt        = "Where is the env file path?"
+	inputDeploymentNamePrompt          = "What deployment you want to name?"
+	inputImageNamePrompt               = "What image you want to name to run?"
+	inputOutputPathPrompt              = "What directory you want to save?"
+	inputSecretNamePrompt              = "What secret you want to name?"
+	inputDockerServerNamePrompt        = "What docker server you want to name?"
+	inputDockerUserNamePrompt          = "What is the username for Docker registry authentiation?"
+	inputDockerUserPasswordPrompt      = "What is the password for Docker registry authentiation?"
+	inputDockerEmailPrompt             = "What is the email address for Docker registry?"
+	inputFromFilePrompt                = "Input key names from file: (e.g path/to/bar):"
+	inputFromLiteralPrompt             = "Input a key-value pair secret (e.g foo='bar'):"
+	inputFromEnvFilePrompt             = "Where is the env file path?"
+	inputNoOfFromFileIterationPrompt   = "How many from-file iterations for your input?"
+	inputNoOfFromLiteralterationPrompt = "How many from-literal iterations for your input?"
 
 	// select
-	inputOutputFormatPrompt        = "Please select an output format:"
-	inputSecretCmdNamePrompt       = "Please select the type of secret:"
-	inputSecretGenericOptionPrompt = "Please select the use case:"
+	inputOutputFormatPrompt  = "Please select an output format:"
+	inputSecretCmdNamePrompt = "Please select the type of secret:"
 )
 
 func (o *jumpStartOpts) AskDeploymentName() error {
@@ -158,35 +160,34 @@ func (o *jumpStartOpts) AskKeyPath() error {
 	return nil
 }
 
-func (o *jumpStartOpts) AskSecretGenericOpts() error {
-	opts := getSecretGenericOpts()
-	secretGenericOpt, err := o.prompt.SelectOne(inputSecretGenericOptionPrompt, "", opts)
-
-	if err != nil {
-		return fmt.Errorf("Prompt for secret generic option: %w", err)
-	}
-
-	o.secretGenericOpt = secretGenericOpt
-
-	return nil
-}
-
 func (o *jumpStartOpts) AskFromFilePath() error {
-	fromFile, err := o.prompt.Get(inputFromFilePrompt, "", nil /*no validation*/)
-	if err != nil {
-		return fmt.Errorf("Prompt for from-file: %w", err)
+	if err := o.AskFromFileIteration(); err != nil {
+		return err
 	}
-	o.fromFile = fromFile
+
+	for i := 0; i < o.noOfFromFileIteration; i++ {
+		fromFile, err := o.prompt.Get(inputFromFilePrompt, "", nil /*no validation*/)
+		if err != nil {
+			return fmt.Errorf("Prompt for from-file: %w", err)
+		}
+		o.fromFile = append(o.fromFile, fromFile)
+	}
 
 	return nil
 }
 
 func (o *jumpStartOpts) AskFromLiteral() error {
-	fromLiteral, err := o.prompt.Get(inputFromLiteralPrompt, "", nil /*no validation*/)
-	if err != nil {
-		return fmt.Errorf("Prompt for from-literal: %w", err)
+	if err := o.AskFromLiteralIteration(); err != nil {
+		return err
 	}
-	o.fromLiteral = fromLiteral
+
+	for i := 0; i < o.noOfFromLiteralIteration; i++ {
+		fromLiteral, err := o.prompt.Get(inputFromLiteralPrompt, "", nil /*no validation*/)
+		if err != nil {
+			return fmt.Errorf("Prompt for from-literal: %w", err)
+		}
+		o.fromLiteral = append(o.fromLiteral, fromLiteral)
+	}
 
 	return nil
 }
@@ -209,6 +210,35 @@ func (o *jumpStartOpts) AskOutputInfo() error {
 	if err := o.AskOutputPath(); err != nil {
 		return err
 	}
+
+	return nil
+}
+
+func (o *jumpStartOpts) AskFromFileIteration() error {
+	// TODO: int vaildation
+	noOfIterationStr, err := o.prompt.Get(inputNoOfFromFileIterationPrompt, "", nil /*no validation*/)
+	if err != nil {
+		return fmt.Errorf("Prompt for from-file iteration: %w", err)
+	}
+
+	noOfFromFileIteration, err := strconv.Atoi(noOfIterationStr)
+	if err != nil {
+		return fmt.Errorf("Prompt for from-file iteration: %w", err)
+	}
+	o.noOfFromFileIteration = noOfFromFileIteration
+
+	return nil
+}
+
+func (o *jumpStartOpts) AskFromLiteralIteration() error {
+	// TODO: int vaildation
+	noOfFromLiteralIterationStr, err := o.prompt.Get(inputNoOfFromLiteralIterationPrompt, "", nil /*no validation*/)
+	if err != nil {
+		return fmt.Errorf("Prompt for from-literal iteration: %w", err)
+	}
+
+	noOfFromLiteralIteration, err := strconv.Atoi(noOfFromLiteralIterationStr)
+	o.noOfFromLiteralIteration = noOfFromLiteralIteration
 
 	return nil
 }
