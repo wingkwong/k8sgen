@@ -1,8 +1,8 @@
 package cli
 
 import (
-	"github.com/wingkwong/k8sgen/third_party/term/prompt"
 	"github.com/spf13/cobra"
+	"github.com/wingkwong/k8sgen/third_party/term/prompt"
 	"os"
 )
 
