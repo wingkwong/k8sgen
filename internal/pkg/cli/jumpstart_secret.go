@@ -32,67 +32,43 @@ func (o *jumpStartOpts) AskSecretCmdOpts() error {
 		}
 
 	case genericCmdName:
-
-		if err := o.AskSecretGenericOpts(); err != nil {
-			return err
-		}
-
 		if err := o.AskSecretName(); err != nil {
 			return err
 		}
 
-		switch o.secretCmdName {
-		// Create a new secret with keys for each file in folder
-		case genericOpt1:
-			if err := o.AskFromFilePath(); err != nil {
-				return err
-			}
-		// Create a new secret with specified keys instead of names on disk
-		case genericOpt2:
-			// TODO: allow multiple --from-file
-			if err := o.AskFromFilePath(); err != nil {
-				return err
-			}
-		// Create a new secret with keys
-		case genericOpt3:
-			// TODO: allow multiple --from-literal
-			if err := o.AskFromLiteral(); err != nil {
-				return err
-			}
-		// Create a new secret using a combination of a file and a literal
-		case genericOpt4:
-			if err := o.AskFromFilePath(); err != nil {
-				return err
-			}
+		if err := o.AskFromFilePath(); err != nil {
+			return err
+		}
 
-			if err := o.AskFromLiteral(); err != nil {
-				return err
-			}
-		// Create a new secret from an env file
-		case genericOpt5:
+		if err := o.AskFromLiteral(); err != nil {
+			return err
+		}
+
+		// from-env-file cannot be combined with from-file or from-literal
+		if len(o.fromLiteral) == 0 && len(o.fromFile) == 0 {
 			if err := o.AskFromEnv(); err != nil {
 				return err
 			}
-
-		case tlsCmdName:
-			if err := o.AskSecretName(); err != nil {
-				return err
-			}
-
-			if err := o.AskCertPath(); err != nil {
-				return err
-			}
-
-			if err := o.AskKeyPath(); err != nil {
-				return err
-			}
-		default:
-			return fmt.Errorf("No available Secret option: %s", o.secretCmdName)
 		}
 
-		if err := o.AskOutputPath(); err != nil {
+	case tlsCmdName:
+		if err := o.AskSecretName(); err != nil {
 			return err
 		}
+
+		if err := o.AskCertPath(); err != nil {
+			return err
+		}
+
+		if err := o.AskKeyPath(); err != nil {
+			return err
+		}
+	default:
+		return fmt.Errorf("No available Secret option: %s", o.secretCmdName)
+	}
+
+	if err := o.AskOutputPath(); err != nil {
+		return err
 	}
 
 	return nil
@@ -109,48 +85,20 @@ func (o *jumpStartOpts) ExecuteSecretCmd() error {
 		}
 
 	case genericCmdName:
-		// 	# Create a new secret named my-secret with keys for each file in folder bar
-		// 	kubectl create secret generic my-secret --from-file=path/to/bar
+		var cmd string
+		cmd = fmt.Sprintf("kubectl create secret generic %s ", o.secretName)
 
-		// 	# Create a new secret named my-secret with specified keys instead of names on disk
-		// 	kubectl create secret generic my-secret --from-file=ssh-privatekey=path/to/id_rsa
-		//   --from-file=ssh-publickey=path/to/id_rsa.pub
-
-		// 	# Create a new secret named my-secret with key1=supersecret and key2=topsecret
-		// 	kubectl create secret generic my-secret --from-literal=key1=supersecret --from-literal=key2=topsecret
-
-		// 	# Create a new secret named my-secret using a combination of a file and a literal
-		// 	kubectl create secret generic my-secret --from-file=ssh-privatekey=path/to/id_rsa --from-literal=passphrase=topsecret
-
-		// 	# Create a new secret named my-secret from an env file
-		// 	kubectl create secret generic my-secret --from-env-file=path/to/bar.env
-
-		switch o.secretCmdName {
-		// Create a new secret with keys for each file in folder
-		case genericOpt1:
-			//TODO
-			return nil
-		// Create a new secret with specified keys instead of names on disk
-		case genericOpt2:
-			//TODO
-			return nil
-
-		// Create a new secret with keys
-		case genericOpt3:
-			//TODO
-			return nil
-
-		// Create a new secret using a combination of a file and a literal
-		case genericOpt4:
-			//TODO
-			return nil
-
-		// Create a new secret from an env file
-		case genericOpt5:
-			//TODO
-			return nil
+		for i := 0; i < o.noOfFromFileIteration; i++ {
+			cmd = cmd + fmt.Sprintf("--from-file=%s ", o.fromFile[i])
 		}
 
+		for i := 0; i < o.noOfFromLiteralIteration; i++ {
+			cmd = cmd + fmt.Sprintf("--from-literal=%s ", o.fromLiteral[i])
+		}
+
+		if len(o.fromLiteral) == 0 && len(o.fromFile) == 0 && o.fromEnvFile != "" {
+			cmd = cmd + fmt.Sprintf("--from-env-file=%s ", o.fromEnvFile)
+		}
 	case tlsCmdName:
 		cmd := fmt.Sprintf("kubectl create secret tls %s --cert=%s --key=%s --output=%s --dry-run=true > %s", o.secretName, o.certPath, o.keyPath, o.outputFormat, o.outputPath)
 
