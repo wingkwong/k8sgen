@@ -38,19 +38,21 @@ type SecretCmdOpts struct {
 	// Key files can be specified using their file path, in which case a default name will be given to them
 	// or optionally with a name and file path, in which case the given name will be used
 	// Specifying a directory will iterate each named file in the directory that is a valid secret key
-	fromFile string
+	fromFile []string
 	// Append a hash of the secret to its name
 	appendHash bool
 	// Secret cert path
 	certPath string
 	// Secret key path
 	keyPath string
-	// Generic Options
-	secretGenericOpt string
 	// Secret from Literal input
-	fromLiteral string
+	fromLiteral []string
 	// Secret from environment file
 	fromEnvFile string
+	// Number of iteration for the same question for fromFile
+	noOfFromFileIteration int
+	// Number of iteration for the same question for fromLiteral
+	noOfFromLiteralIteration int
 }
 
 func NewGlobalOpts() *GlobalOpts {
