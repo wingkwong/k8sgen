@@ -7,18 +7,18 @@ import (
 
 const (
 	// text input
-	inputDeploymentNamePrompt          = "What deployment you want to name?"
-	inputImageNamePrompt               = "What image you want to name to run?"
-	inputOutputPathPrompt              = "What directory you want to save?"
-	inputSecretNamePrompt              = "What secret you want to name?"
-	inputDockerServerNamePrompt        = "What docker server you want to name?"
-	inputDockerUserNamePrompt          = "What is the username for Docker registry authentiation?"
-	inputDockerUserPasswordPrompt      = "What is the password for Docker registry authentiation?"
-	inputDockerEmailPrompt             = "What is the email address for Docker registry?"
-	inputFromFilePrompt                = "Input key names from file: (e.g path/to/bar):"
-	inputFromLiteralPrompt             = "Input a key-value pair secret (e.g foo='bar'):"
-	inputFromEnvFilePrompt             = "Where is the env file path?"
-	inputNoOfFromFileIterationPrompt   = "How many from-file iterations for your input?"
+	inputDeploymentNamePrompt           = "What deployment you want to name?"
+	inputImageNamePrompt                = "What image you want to name to run?"
+	inputOutputPathPrompt               = "What directory you want to save?"
+	inputSecretNamePrompt               = "What secret you want to name?"
+	inputDockerServerNamePrompt         = "What docker server you want to name?"
+	inputDockerUserNamePrompt           = "What is the username for Docker registry authentiation?"
+	inputDockerUserPasswordPrompt       = "What is the password for Docker registry authentiation?"
+	inputDockerEmailPrompt              = "What is the email address for Docker registry?"
+	inputFromFilePrompt                 = "Input key names from file: (e.g path/to/bar):"
+	inputFromLiteralPrompt              = "Input a key-value pair secret (e.g foo='bar'):"
+	inputFromEnvFilePrompt              = "Where is the env file path?"
+	inputNoOfFromFileIterationPrompt    = "How many from-file iterations for your input?"
 	inputNoOfFromLiteralIterationPrompt = "How many from-literal iterations for your input?"
 
 	// select
