@@ -54,13 +54,6 @@ const (
 	dockerRegistryCmdName = "docker-registry"
 	genericCmdName        = "generic"
 	tlsCmdName            = "tls"
-
-	// Generic Opts
-	genericOpt1 = "Create a new secret with keys for each file in folder"
-	genericOpt2 = "Create a new secret with specified keys instead of names on disk"
-	genericOpt3 = "Create a new secret with keys"
-	genericOpt4 = "Create a new secret using a combination of a file and a literal"
-	genericOpt5 = "Create a new secret from an env file"
 )
 
 func getKindNames() []string {
@@ -101,15 +94,5 @@ func getSecretNames() []string {
 		dockerRegistryCmdName,
 		genericCmdName,
 		tlsCmdName,
-	}
-}
-
-func getSecretGenericOpts() []string {
-	return []string{
-		genericOpt1,
-		genericOpt2,
-		genericOpt3,
-		genericOpt4,
-		genericOpt5,
 	}
 }
