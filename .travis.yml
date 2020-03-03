@@ -1,0 +1,12 @@
+language: go
+
+go:
+- 1.13.x
+
+script:
+- make fmt
+- make test
+- make dist
+
+env:
+- GO111MODULE=on
