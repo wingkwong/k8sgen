@@ -1,5 +1,8 @@
 package cli
 
+import (
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+)
 
 type GlobalOpts struct {
 	// Global Prompter
@@ -16,6 +19,8 @@ type askVars struct {
 	SecretCmdOpts
 
 	DeploymentOpts
+
+	k8s
 
 	KindName string
 }
@@ -62,4 +67,38 @@ type SecretCmdOpts struct {
 	noOfFromFileIteration int
 	// Number of iteration for the same question for fromLiteral
 	noOfFromLiteralIteration int
+}
+
+type DeploymentOpts struct {
+	// Deployment
+	requireObjectMeta       bool
+	requireDeploymentSpec   bool
+	requireDeploymentStatus bool
+
+	// DeploymentSpec
+	DeploymentSpecOpts
+	// DeploymentStatus
+	DeploymentStatusOpts
+}
+
+type DeploymentSpecOpts struct {
+	requireMoreThanOneReplica   bool
+	requireDeploymentStrategy   bool
+	requireMinReadySeconds      bool
+	requireRevisionHistoryLimit bool
+	requirePaused               bool
+}
+
+type DeploymentStatusOpts struct {
+	requireObservedGeneration  bool
+	requireReplicas            bool
+	requireUpdatedReplicas     bool
+	requireReadyReplicas       bool
+	requireAvailableReplicas   bool
+	requireUnavailableReplicas bool
+	requireCollisionCount      bool
+}
+
+type k8s struct {
+	metav1.ObjectMeta
 }
