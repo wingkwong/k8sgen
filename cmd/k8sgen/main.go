@@ -17,7 +17,7 @@ func main() {
 func buildRootCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:              "k8sgen",
-		Short:            "Generating Kubenetes Resource Configurations in an Interactive CLI",
+		Short:            "Generating Kubernetes Resource Configurations in an Interactive CLI",
 		Example:          `k8sgen`,
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {},
 		SilenceUsage:     true,
