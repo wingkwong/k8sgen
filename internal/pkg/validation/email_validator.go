@@ -3,6 +3,6 @@ package validation
 type emailValidation struct {
 }
 
-func (m emailValidation) Validate() {
-
+func (m emailValidation) Validate(obj interface{}) error {
+	return nil
 }
