@@ -1,14 +1,14 @@
 package cli
 
 import (
-	"fmt"
 	"errors"
+	"fmt"
 	"strconv"
 )
 
 const (
 	// text input
-	inputKindNamePrompt = "What kind of object you want to create?"
+	inputKindNamePrompt                 = "What kind of object you want to create?"
 	inputDeploymentNamePrompt           = "What deployment you want to name?"
 	inputImageNamePrompt                = "What image you want to name to run?"
 	inputOutputPathPrompt               = "What directory you want to save?"

@@ -1,9 +1,5 @@
 package cli
 
-import (
-	
-)
-
 func (o *askOpts) AskDeploymentSpecOpts() error {
 	if err := o.AskDeploymentName(); err != nil {
 		return err
@@ -12,7 +8,7 @@ func (o *askOpts) AskDeploymentSpecOpts() error {
 	if err := o.AskImageName(); err != nil {
 		return err
 	}
-	
+
 	if err := o.AskOutputInfo(); err != nil {
 		return err
 	}
