@@ -4,12 +4,12 @@ import (
 	"fmt"
 )
 
-func (o *jumpStartOpts) AskPriorityClassCmdOpts() error {
+func (o *askOpts) AskPriorityClassCmdOpts() error {
 	// TODO:
 	return nil
 }
 
-func (o *jumpStartOpts) ExecutePriorityClassCmd() error {
+func (o *askOpts) ExecutePriorityClassCmd() error {
 	// TODO:
 	cmd := ""
 
@@ -20,7 +20,7 @@ func (o *jumpStartOpts) ExecutePriorityClassCmd() error {
 	return nil
 }
 
-func (o *jumpStartOpts) ExecuteJumpStartPriorityClassCmd() error {
+func (o *askOpts) ExecuteJumpStartPriorityClassCmd() error {
 	if err := o.AskPriorityClassCmdOpts(); err != nil {
 		return err
 	}

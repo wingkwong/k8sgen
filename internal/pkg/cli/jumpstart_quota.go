@@ -4,12 +4,12 @@ import (
 	"fmt"
 )
 
-func (o *jumpStartOpts) AskQuotaCmdOpts() error {
+func (o *askOpts) AskQuotaCmdOpts() error {
 	// TODO:
 	return nil
 }
 
-func (o *jumpStartOpts) ExecuteQuotaCmd() error {
+func (o *askOpts) ExecuteQuotaCmd() error {
 	// TODO:
 	cmd := ""
 
@@ -20,7 +20,7 @@ func (o *jumpStartOpts) ExecuteQuotaCmd() error {
 	return nil
 }
 
-func (o *jumpStartOpts) ExecuteJumpStartQuotaCmd() error {
+func (o *askOpts) ExecuteJumpStartQuotaCmd() error {
 	if err := o.AskQuotaCmdOpts(); err != nil {
 		return err
 	}

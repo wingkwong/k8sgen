@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func (o *jumpStartOpts) AskSecretCmdOpts() error {
+func (o *askOpts) AskSecretCmdOpts() error {
 	if err := o.AskSecretCmdName(); err != nil {
 		return err
 	}
@@ -74,7 +74,7 @@ func (o *jumpStartOpts) AskSecretCmdOpts() error {
 	return nil
 }
 
-func (o *jumpStartOpts) ExecuteSecretCmd() error {
+func (o *askOpts) ExecuteSecretCmd() error {
 
 	var cmd string
 
@@ -111,7 +111,7 @@ func (o *jumpStartOpts) ExecuteSecretCmd() error {
 	return nil
 }
 
-func (o *jumpStartOpts) ExecuteJumpStartSecretCmd() error {
+func (o *askOpts) ExecuteJumpStartSecretCmd() error {
 	if err := o.AskSecretCmdOpts(); err != nil {
 		return err
 	}

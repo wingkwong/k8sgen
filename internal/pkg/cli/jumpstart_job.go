@@ -4,12 +4,12 @@ import (
 	"fmt"
 )
 
-func (o *jumpStartOpts) AskJobCmdOpts() error {
+func (o *askOpts) AskJobCmdOpts() error {
 	// TODO:
 	return nil
 }
 
-func (o *jumpStartOpts) ExecuteJobCmd() error {
+func (o *askOpts) ExecuteJobCmd() error {
 	// TODO:
 	cmd := ""
 
@@ -20,7 +20,7 @@ func (o *jumpStartOpts) ExecuteJobCmd() error {
 	return nil
 }
 
-func (o *jumpStartOpts) ExecuteJumpStartJobCmd() error {
+func (o *askOpts) ExecuteJumpStartJobCmd() error {
 	if err := o.AskJobCmdOpts(); err != nil {
 		return err
 	}

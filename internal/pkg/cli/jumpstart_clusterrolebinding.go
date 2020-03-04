@@ -4,12 +4,12 @@ import (
 	"fmt"
 )
 
-func (o *jumpStartOpts) AskClusterRoleBindingCmdOpts() error {
+func (o *askOpts) AskClusterRoleBindingCmdOpts() error {
 	// TODO:
 	return nil
 }
 
-func (o *jumpStartOpts) ExecuteClusterRoleBindingCmd() error {
+func (o *askOpts) ExecuteClusterRoleBindingCmd() error {
 	// TODO:
 	cmd := ""
 
@@ -20,7 +20,7 @@ func (o *jumpStartOpts) ExecuteClusterRoleBindingCmd() error {
 	return nil
 }
 
-func (o *jumpStartOpts) ExecuteJumpStartClusterRoleBindingCmd() error {
+func (o *askOpts) ExecuteJumpStartClusterRoleBindingCmd() error {
 	if err := o.AskClusterRoleBindingCmdOpts(); err != nil {
 		return err
 	}

@@ -26,7 +26,25 @@ const (
 	inputSecretCmdNamePrompt = "Please select the type of secret:"
 )
 
-func (o *jumpStartOpts) AskDeploymentName() error {
+type askVars struct {
+	*GlobalOpts
+	DeploymentCmdOpts
+	SecretCmdOpts
+
+	KindName string
+}
+
+type askOpts struct {
+	askVars
+}
+
+func newAskOpts(vars askVars) (*askOpts, error) {
+	return &askOpts{
+		askVars: vars,
+	}, nil
+}
+
+func (o *askOpts) AskDeploymentName() error {
 	deploymentName, err := o.prompt.Get(inputDeploymentNamePrompt, "", validateDeploymentName)
 
 	if err != nil {
@@ -38,7 +56,7 @@ func (o *jumpStartOpts) AskDeploymentName() error {
 	return nil
 }
 
-func (o *jumpStartOpts) AskImageName() error {
+func (o *askOpts) AskImageName() error {
 	imageName, err := o.prompt.Get(inputImageNamePrompt, "", nil /*no validation*/)
 	if err != nil {
 		return fmt.Errorf("Prompt for image name: %w", err)
@@ -48,7 +66,7 @@ func (o *jumpStartOpts) AskImageName() error {
 	return nil
 }
 
-func (o *jumpStartOpts) AskOutputFormat() error {
+func (o *askOpts) AskOutputFormat() error {
 	formats := getOutputFormats()
 	outputFormat, err := o.prompt.SelectOne(inputOutputFormatPrompt, "", formats)
 	if err != nil {
@@ -59,7 +77,7 @@ func (o *jumpStartOpts) AskOutputFormat() error {
 	return nil
 }
 
-func (o *jumpStartOpts) AskOutputPath() error {
+func (o *askOpts) AskOutputPath() error {
 	outputPath, err := o.prompt.Get(inputOutputPathPrompt, "", nil)
 	if err != nil {
 		return fmt.Errorf("Prompt for output path: %w", err)
@@ -73,7 +91,7 @@ func (o *jumpStartOpts) AskOutputPath() error {
 	return nil
 }
 
-func (o *jumpStartOpts) AskSecretCmdName() error {
+func (o *askOpts) AskSecretCmdName() error {
 	secrets := getSecretNames()
 	secretCmdName, err := o.prompt.SelectOne(inputSecretCmdNamePrompt, `
 docker-registry Create a secret for use with a Docker registry
@@ -89,7 +107,7 @@ tls             Create a TLS secret`, secrets)
 	return nil
 }
 
-func (o *jumpStartOpts) AskSecretName() error {
+func (o *askOpts) AskSecretName() error {
 	secretName, err := o.prompt.Get(inputSecretNamePrompt, "", nil /*no validation*/)
 	if err != nil {
 		return fmt.Errorf("Prompt for secret name: %w", err)
@@ -99,7 +117,7 @@ func (o *jumpStartOpts) AskSecretName() error {
 	return nil
 }
 
-func (o *jumpStartOpts) AskDockerServerName() error {
+func (o *askOpts) AskDockerServerName() error {
 	dockerServer, err := o.prompt.Get(inputDockerServerNamePrompt, "", nil /*no validation*/)
 	if err != nil {
 		return fmt.Errorf("Prompt for docker server name: %w", err)
@@ -109,7 +127,7 @@ func (o *jumpStartOpts) AskDockerServerName() error {
 	return nil
 }
 
-func (o *jumpStartOpts) AskDockerUserName() error {
+func (o *askOpts) AskDockerUserName() error {
 	dockerUserName, err := o.prompt.Get(inputDockerUserNamePrompt, "", nil /*no validation*/)
 	if err != nil {
 		return fmt.Errorf("Prompt for docker username: %w", err)
@@ -119,7 +137,7 @@ func (o *jumpStartOpts) AskDockerUserName() error {
 	return nil
 }
 
-func (o *jumpStartOpts) AskDockerUserPassword() error {
+func (o *askOpts) AskDockerUserPassword() error {
 	dockerUserPassword, err := o.prompt.GetSecret(inputDockerUserPasswordPrompt, "")
 	if err != nil {
 		return fmt.Errorf("Prompt for docker password: %w", err)
@@ -129,7 +147,7 @@ func (o *jumpStartOpts) AskDockerUserPassword() error {
 	return nil
 }
 
-func (o *jumpStartOpts) AskDockerEmail() error {
+func (o *askOpts) AskDockerEmail() error {
 	// TODO: email validation
 	dockerEmail, err := o.prompt.Get(inputDockerEmailPrompt, "", nil /*no validation*/)
 	if err != nil {
@@ -140,7 +158,7 @@ func (o *jumpStartOpts) AskDockerEmail() error {
 	return nil
 }
 
-func (o *jumpStartOpts) AskCertPath() error {
+func (o *askOpts) AskCertPath() error {
 	certPath, err := o.prompt.Get(inputDockerUserNamePrompt, "", nil /*no validation*/)
 	if err != nil {
 		return fmt.Errorf("Prompt for cert path: %w", err)
@@ -150,7 +168,7 @@ func (o *jumpStartOpts) AskCertPath() error {
 	return nil
 }
 
-func (o *jumpStartOpts) AskKeyPath() error {
+func (o *askOpts) AskKeyPath() error {
 	keyPath, err := o.prompt.Get(inputDockerUserNamePrompt, "", nil /*no validation*/)
 	if err != nil {
 		return fmt.Errorf("Prompt for key path: %w", err)
@@ -160,7 +178,7 @@ func (o *jumpStartOpts) AskKeyPath() error {
 	return nil
 }
 
-func (o *jumpStartOpts) AskFromFilePath() error {
+func (o *askOpts) AskFromFilePath() error {
 	if err := o.AskFromFileIteration(); err != nil {
 		return err
 	}
@@ -176,7 +194,7 @@ func (o *jumpStartOpts) AskFromFilePath() error {
 	return nil
 }
 
-func (o *jumpStartOpts) AskFromLiteral() error {
+func (o *askOpts) AskFromLiteral() error {
 	if err := o.AskFromLiteralIteration(); err != nil {
 		return err
 	}
@@ -192,7 +210,7 @@ func (o *jumpStartOpts) AskFromLiteral() error {
 	return nil
 }
 
-func (o *jumpStartOpts) AskFromEnv() error {
+func (o *askOpts) AskFromEnv() error {
 	fromEnvFile, err := o.prompt.Get(inputFromEnvFilePrompt, "", nil /*no validation*/)
 	if err != nil {
 		return fmt.Errorf("Prompt for env: %w", err)
@@ -202,7 +220,7 @@ func (o *jumpStartOpts) AskFromEnv() error {
 	return nil
 }
 
-func (o *jumpStartOpts) AskOutputInfo() error {
+func (o *askOpts) AskOutputInfo() error {
 	if err := o.AskOutputFormat(); err != nil {
 		return err
 	}
@@ -214,7 +232,7 @@ func (o *jumpStartOpts) AskOutputInfo() error {
 	return nil
 }
 
-func (o *jumpStartOpts) AskFromFileIteration() error {
+func (o *askOpts) AskFromFileIteration() error {
 	// TODO: int vaildation
 	noOfIterationStr, err := o.prompt.Get(inputNoOfFromFileIterationPrompt, "", nil /*no validation*/)
 	if err != nil {
@@ -230,7 +248,7 @@ func (o *jumpStartOpts) AskFromFileIteration() error {
 	return nil
 }
 
-func (o *jumpStartOpts) AskFromLiteralIteration() error {
+func (o *askOpts) AskFromLiteralIteration() error {
 	// TODO: int vaildation
 	noOfFromLiteralIterationStr, err := o.prompt.Get(inputNoOfFromLiteralIterationPrompt, "", nil /*no validation*/)
 	if err != nil {

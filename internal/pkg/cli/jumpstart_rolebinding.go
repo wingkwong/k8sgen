@@ -4,12 +4,12 @@ import (
 	"fmt"
 )
 
-func (o *jumpStartOpts) AskRoleBindingCmdOpts() error {
+func (o *askOpts) AskRoleBindingCmdOpts() error {
 	// TODO:
 	return nil
 }
 
-func (o *jumpStartOpts) ExecuteRoleBindingCmd() error {
+func (o *askOpts) ExecuteRoleBindingCmd() error {
 	// TODO:
 	cmd := ""
 
@@ -20,7 +20,7 @@ func (o *jumpStartOpts) ExecuteRoleBindingCmd() error {
 	return nil
 }
 
-func (o *jumpStartOpts) ExecuteJumpStartRoleBindingCmd() error {
+func (o *askOpts) ExecuteJumpStartRoleBindingCmd() error {
 	if err := o.AskRoleBindingCmdOpts(); err != nil {
 		return err
 	}

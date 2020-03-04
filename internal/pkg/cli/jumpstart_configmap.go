@@ -4,12 +4,12 @@ import (
 	"fmt"
 )
 
-func (o *jumpStartOpts) AskConfigMapCmdOpts() error {
+func (o *askOpts) AskConfigMapCmdOpts() error {
 	// TODO:
 	return nil
 }
 
-func (o *jumpStartOpts) ExecuteConfigMapCmd() error {
+func (o *askOpts) ExecuteConfigMapCmd() error {
 	// TODO:
 	cmd := ""
 
@@ -20,7 +20,7 @@ func (o *jumpStartOpts) ExecuteConfigMapCmd() error {
 	return nil
 }
 
-func (o *jumpStartOpts) ExecuteJumpStartConfigMapCmd() error {
+func (o *askOpts) ExecuteJumpStartConfigMapCmd() error {
 	if err := o.AskConfigMapCmdOpts(); err != nil {
 		return err
 	}

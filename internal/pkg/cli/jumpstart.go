@@ -6,25 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type jumpStartVars struct {
-	*GlobalOpts
-	DeploymentCmdOpts
-	SecretCmdOpts
-
-	KindName string
-}
-
-type jumpStartOpts struct {
-	jumpStartVars
-}
-
-func newJumpStartOpts(vars jumpStartVars) (*jumpStartOpts, error) {
-	return &jumpStartOpts{
-		jumpStartVars: vars,
-	}, nil
-}
-
-func (o *jumpStartOpts) Ask() error {
+func (o *askOpts) Ask() error {
 	if err := o.askKindName(); err != nil {
 		return err
 	}
@@ -32,7 +14,7 @@ func (o *jumpStartOpts) Ask() error {
 	return nil
 }
 
-func (o *jumpStartOpts) askKindName() error {
+func (o *askOpts) askKindName() error {
 	if o.KindName != "" {
 		return nil
 	}
@@ -51,7 +33,7 @@ func (o *jumpStartOpts) askKindName() error {
 	return nil
 }
 
-func (o *jumpStartOpts) Execute() error {
+func (o *askOpts) Execute() error {
 	switch o.KindName {
 	case clusterRoleName:
 		if err := o.ExecuteJumpStartClusterRoleCmd(); err != nil {
@@ -117,7 +99,7 @@ func (o *jumpStartOpts) Execute() error {
 }
 
 func BuildJumpStartCmd() *cobra.Command {
-	vars := jumpStartVars{
+	vars := askVars{
 		GlobalOpts: NewGlobalOpts(),
 	}
 	cmd := &cobra.Command{
@@ -130,7 +112,7 @@ func BuildJumpStartCmd() *cobra.Command {
 				return fmt.Errorf("kubectl is not installed")
 			}
 
-			opts, err := newJumpStartOpts(vars)
+			opts, err := newAskOpts(vars)
 			if err != nil {
 				return err
 			}

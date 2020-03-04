@@ -4,12 +4,12 @@ import (
 	"fmt"
 )
 
-func (o *jumpStartOpts) AskPodDisruptionBudgetCmdOpts() error {
+func (o *askOpts) AskPodDisruptionBudgetCmdOpts() error {
 	// TODO:
 	return nil
 }
 
-func (o *jumpStartOpts) ExecutePodDisruptionBudgetCmd() error {
+func (o *askOpts) ExecutePodDisruptionBudgetCmd() error {
 	// TODO:
 	cmd := ""
 
@@ -20,7 +20,7 @@ func (o *jumpStartOpts) ExecutePodDisruptionBudgetCmd() error {
 	return nil
 }
 
-func (o *jumpStartOpts) ExecuteJumpStartPodDisruptionBudgetCmd() error {
+func (o *askOpts) ExecuteJumpStartPodDisruptionBudgetCmd() error {
 	if err := o.AskPodDisruptionBudgetCmdOpts(); err != nil {
 		return err
 	}

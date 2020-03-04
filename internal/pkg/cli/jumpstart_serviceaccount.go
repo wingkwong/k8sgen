@@ -4,12 +4,12 @@ import (
 	"fmt"
 )
 
-func (o *jumpStartOpts) AskServiceAccountCmdOpts() error {
+func (o *askOpts) AskServiceAccountCmdOpts() error {
 	// TODO:
 	return nil
 }
 
-func (o *jumpStartOpts) ExecuteServiceAccountCmd() error {
+func (o *askOpts) ExecuteServiceAccountCmd() error {
 	// TODO:
 	cmd := ""
 
@@ -20,7 +20,7 @@ func (o *jumpStartOpts) ExecuteServiceAccountCmd() error {
 	return nil
 }
 
-func (o *jumpStartOpts) ExecuteJumpStartServiceAccountCmd() error {
+func (o *askOpts) ExecuteJumpStartServiceAccountCmd() error {
 	if err := o.AskServiceAccountCmdOpts(); err != nil {
 		return err
 	}

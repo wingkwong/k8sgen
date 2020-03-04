@@ -4,12 +4,12 @@ import (
 	"fmt"
 )
 
-func (o *jumpStartOpts) AskNamespaceCmdOpts() error {
+func (o *askOpts) AskNamespaceCmdOpts() error {
 	// TODO:
 	return nil
 }
 
-func (o *jumpStartOpts) ExecuteNamespaceCmd() error {
+func (o *askOpts) ExecuteNamespaceCmd() error {
 	// TODO:
 	cmd := ""
 
@@ -20,7 +20,7 @@ func (o *jumpStartOpts) ExecuteNamespaceCmd() error {
 	return nil
 }
 
-func (o *jumpStartOpts) ExecuteJumpStartNamespaceCmd() error {
+func (o *askOpts) ExecuteJumpStartNamespaceCmd() error {
 	if err := o.AskNamespaceCmdOpts(); err != nil {
 		return err
 	}

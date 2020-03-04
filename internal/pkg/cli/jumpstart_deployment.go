@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func (o *jumpStartOpts) AskDeploymentCmdOpts() error {
+func (o *askOpts) AskDeploymentCmdOpts() error {
 	if err := o.AskDeploymentName(); err != nil {
 		return err
 	}
@@ -20,7 +20,7 @@ func (o *jumpStartOpts) AskDeploymentCmdOpts() error {
 	return nil
 }
 
-func (o *jumpStartOpts) ExecuteDeploymentCmd() error {
+func (o *askOpts) ExecuteDeploymentCmd() error {
 	// 	Options:
 	//       --dry-run=false: If true, only print the object that would be sent, without sending it.
 	//       --image=[]: Image name to run.
@@ -35,7 +35,7 @@ func (o *jumpStartOpts) ExecuteDeploymentCmd() error {
 	return nil
 }
 
-func (o *jumpStartOpts) ExecuteJumpStartDeploymentCmd() error {
+func (o *askOpts) ExecuteJumpStartDeploymentCmd() error {
 	if err := o.AskDeploymentCmdOpts(); err != nil {
 		return err
 	}
