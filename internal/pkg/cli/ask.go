@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+    "reflect"
+	"github.com/wingkwong/k8sgen/third_party/term/prompt"
 )
 
 const (
@@ -32,6 +34,23 @@ const (
 	inputRequireDeploymentStatusPrompt = "Do you want to input Deployment Status?"
 )
 
+type Question struct{
+	name string
+	promptMessage string
+	promptHelpMessage string
+	promptErrorMessage string
+	validation prompt.ValidatorFunc
+	opts []string
+	funcName string
+}
+
+var questions = map[string]Question{
+	"Kind": {"KindName", inputKindNamePrompt, "", "Select kind name", nil, kindNames, "AskSelect"},
+	"DeploymentName": {"DeploymentName", inputDeploymentNamePrompt, "", "Prompt for deployment name", validateDeploymentName, nil, "AskGet"},
+}
+
+
+
 func getYesNoSelectOpts() []string {
 	return []string{
 		"Yes",
@@ -39,10 +58,68 @@ func getYesNoSelectOpts() []string {
 	}
 }
 
+func getQuestionKey(key string) {
+	
+}
+
 func newAskOpts(vars askVars) (*askOpts, error) {
 	return &askOpts{
 		askVars: vars,
 	}, nil
+}
+
+func (o *askOpts) AskGet(name string, promptMessage string, promptHelpMessage string, promptErrorMessage string, validation prompt.ValidatorFunc ) error {
+	val, err := o.prompt.Get(promptMessage, promptHelpMessage, validation)
+	if err != nil {
+		return fmt.Errorf("%s: %w", promptErrorMessage, err)
+	}
+
+	reflect.ValueOf(&o).Elem().Set(reflect.ValueOf(val))
+	// (*o)[name] = val
+
+	return nil
+}
+
+func (o *askOpts) AskSelect(name string, promptMessage string, promptHelpMessage string, promptErrorMessage string, opts []string) error {
+	val, err := o.prompt.SelectOne(inputOutputFormatPrompt, promptHelpMessage, opts)
+	if err != nil {
+		return fmt.Errorf("%s: %w", promptErrorMessage, err)
+	}
+	
+	// o.KindName = val
+	
+
+	return nil
+}
+
+func (o *askOpts) AskGetSecret(name string, promptMessage string, promptHelpMessage string, promptErrorMessage string) error {
+	val, err := o.prompt.GetSecret(inputOutputFormatPrompt, promptHelpMessage)
+	if err != nil {
+		return fmt.Errorf("%s: %w", promptErrorMessage, err)
+	}
+	reflect.ValueOf(&o).Elem().FieldByName(name).SetString(val)
+
+	return nil
+}
+
+func (o *askOpts) Ask(key string) error{
+	q, exists := questions[key]
+
+	if !exists { 
+		return fmt.Errorf("key not exists in questions")
+	}
+
+	if q.funcName == "AskGet" {
+		o.AskGet(q.name, q.promptMessage, q.promptHelpMessage, q.promptErrorMessage, q.validation)
+	} else if q.funcName == "AskSelect" {
+		o.AskSelect(q.name, q.promptMessage, q.promptHelpMessage, q.promptErrorMessage, q.opts)
+	} else if q.funcName == "AskGetSecret" {
+		o.AskGetSecret(q.name, q.promptMessage, q.promptHelpMessage, q.promptErrorMessage)
+	} else {
+		return fmt.Errorf("Unexpected q.funcName. Available options: AskGet, AskSelect, AskGetSecret")
+	}
+
+	return nil
 }
 
 func (o *askOpts) askKindName() error {

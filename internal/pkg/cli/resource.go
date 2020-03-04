@@ -56,6 +56,8 @@ const (
 	tlsCmdName            = "tls"
 )
 
+var kindNames = getKindNames() 
+
 func getKindNames() []string {
 	return []string{
 		clusterRoleName,

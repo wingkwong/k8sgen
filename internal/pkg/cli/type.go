@@ -29,8 +29,13 @@ type askOpts struct {
 	askVars
 }
 
+type ValidatorFunc func(interface{})
+
+type getSelectOptsFn func()
+
 type DeploymentCmdOpts struct {
 	// Name of the Deployment
+	DeploymentName string
 	deploymentName string
 	// Name of the image
 	imageName string
@@ -101,4 +106,5 @@ type DeploymentStatusOpts struct {
 
 type k8s struct {
 	metav1.ObjectMeta
+	metav1.TypeMeta
 }

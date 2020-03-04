@@ -6,7 +6,7 @@ import (
 )
 
 func (o *askOpts) AskCreateSpec() error {
-	if err := o.askKindName(); err != nil {
+	if err := o.Ask("Kind"); err != nil {
 		return err
 	}
 
