@@ -2,11 +2,13 @@ package cli
 
 import (
 	"fmt"
+	"errors"
 	"strconv"
 )
 
 const (
 	// text input
+	inputKindNamePrompt = "What kind of object you want to create?"
 	inputDeploymentNamePrompt           = "What deployment you want to name?"
 	inputImageNamePrompt                = "What image you want to name to run?"
 	inputOutputPathPrompt               = "What directory you want to save?"
@@ -42,6 +44,25 @@ func newAskOpts(vars askVars) (*askOpts, error) {
 	return &askOpts{
 		askVars: vars,
 	}, nil
+}
+
+func (o *askOpts) askKindName() error {
+	if o.KindName != "" {
+		return nil
+	}
+
+	names := getKindNames()
+
+	if len(names) == 0 {
+		return errors.New("No object is found")
+	}
+
+	selectedKindName, err := o.prompt.SelectOne(inputKindNamePrompt, "", names)
+	if err != nil {
+		return fmt.Errorf("Select kind name: %w", err)
+	}
+	o.KindName = selectedKindName
+	return nil
 }
 
 func (o *askOpts) AskDeploymentName() error {
