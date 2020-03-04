@@ -1,28 +1,11 @@
 package cli
 
 import (
-	"errors"
 	"fmt"
 	"github.com/spf13/cobra"
 )
 
-type createVars struct {
-	*GlobalOpts
-	DeploymentCmdOpts
-	KindName string
-}
-
-type createOpts struct {
-	createVars
-}
-
-func newCreateOpts(vars createVars) (*createOpts, error) {
-	return &createOpts{
-		createVars: vars,
-	}, nil
-}
-
-func (o *createOpts) Ask() error {
+func (o *askOpts) AskCreateSpec() error {
 	if err := o.askKindName(); err != nil {
 		return err
 	}
@@ -30,29 +13,10 @@ func (o *createOpts) Ask() error {
 	return nil
 }
 
-func (o *createOpts) askKindName() error {
-	if o.KindName != "" {
-		return nil
-	}
-
-	names := getKindNames()
-
-	if len(names) == 0 {
-		return errors.New("No object is found")
-	}
-
-	selectedKindName, err := o.prompt.SelectOne("What kind of object you want to create?", "", names)
-	if err != nil {
-		return fmt.Errorf("Select kind name: %w", err)
-	}
-	o.KindName = selectedKindName
-	return nil
-}
-
-func (o *createOpts) Execute() error {
+func (o *askOpts) ExecuteCreateSpec() error {
 	switch o.KindName {
 	case deploymentName:
-		if err := o.ExecuteCreateDeploymentCmd(); err != nil {
+		if err := o.ExecuteCreateDeploymentSpec(); err != nil {
 			return err
 		}
 	default:
@@ -63,23 +27,23 @@ func (o *createOpts) Execute() error {
 }
 
 func BuildCreateCmd() *cobra.Command {
-	vars := createVars{
+	vars := askVars{
 		GlobalOpts: NewGlobalOpts(),
 	}
 	cmd := &cobra.Command{
 		Use:   "create",
-		Short: "Create your Kubenetes resources",
+		Short: "Create your Kubernetes resources",
 		Example: `
   $ k8sgen create`,
 		RunE: runCmdE(func(cmd *cobra.Command, args []string) error {
-			opts, err := newCreateOpts(vars)
+			opts, err := newAskOpts(vars)
 			if err != nil {
 				return err
 			}
-			if err := opts.Ask(); err != nil {
+			if err := opts.AskCreateSpec(); err != nil {
 				return err
 			}
-			if err := opts.Execute(); err != nil {
+			if err := opts.ExecuteCreateSpec(); err != nil {
 				return err
 			}
 			return nil
