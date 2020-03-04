@@ -22,11 +22,22 @@ const (
 	inputFromEnvFilePrompt              = "Where is the env file path?"
 	inputNoOfFromFileIterationPrompt    = "How many from-file iterations for your input?"
 	inputNoOfFromLiteralIterationPrompt = "How many from-literal iterations for your input?"
+	inputNamespacePrompt                = ""
 
 	// select
-	inputOutputFormatPrompt  = "Please select an output format:"
-	inputSecretCmdNamePrompt = "Please select the type of secret:"
+	inputOutputFormatPrompt            = "Please select an output format:"
+	inputSecretCmdNamePrompt           = "Please select the type of secret:"
+	inputRequireObjectMetaPrompt       = "Do you want to input Object Meta?"
+	inputRequireDeploymentSpecPrompt   = "Do you want to input Deployment Spec?"
+	inputRequireDeploymentStatusPrompt = "Do you want to input Deployment Status?"
 )
+
+func getYesNoSelectOpts() []string {
+	return []string{
+		"Yes",
+		"No",
+	}
+}
 
 func newAskOpts(vars askVars) (*askOpts, error) {
 	return &askOpts{
@@ -266,6 +277,72 @@ func (o *askOpts) AskFromLiteralIteration() error {
 
 	noOfFromLiteralIteration, err := strconv.Atoi(noOfFromLiteralIterationStr)
 	o.noOfFromLiteralIteration = noOfFromLiteralIteration
+
+	return nil
+}
+
+// ask for building k8s spec
+
+func (o *askOpts) AskRequireObjectMeta() error {
+	opts := getYesNoSelectOpts()
+	requireObjectMeta, err := o.prompt.SelectOne(inputRequireObjectMetaPrompt, "" /* TODO: may add help text*/, opts)
+	if err != nil {
+		return fmt.Errorf("Prompt for AskRequireObjectMeta: %w", err)
+	}
+
+	if requireObjectMeta == "Yes" {
+		o.requireObjectMeta = true
+	} else if requireObjectMeta == "No" {
+		o.requireObjectMeta = false
+	} else {
+		return fmt.Errorf("Unexpected requireObjectMeta")
+	}
+
+	return nil
+}
+
+func (o *askOpts) AskRequireDeploymentSpec() error {
+	opts := getYesNoSelectOpts()
+	requireDeploymentSpec, err := o.prompt.SelectOne(inputRequireDeploymentSpecPrompt, "" /* TODO: may add help text*/, opts)
+	if err != nil {
+		return fmt.Errorf("Prompt for AskRequireDeploymentSpec: %w", err)
+	}
+
+	if requireDeploymentSpec == "Yes" {
+		o.requireDeploymentSpec = true
+	} else if requireDeploymentSpec == "No" {
+		o.requireDeploymentSpec = false
+	} else {
+		return fmt.Errorf("Unexpected requireDeploymentSpec")
+	}
+
+	return nil
+}
+
+func (o *askOpts) AskRequireDeploymentStatus() error {
+	opts := getYesNoSelectOpts()
+	requireDeploymentStatus, err := o.prompt.SelectOne(inputRequireDeploymentStatusPrompt, "" /* TODO: may add help text*/, opts)
+	if err != nil {
+		return fmt.Errorf("Prompt for AskRequireDeploymentStatus: %w", err)
+	}
+
+	if requireDeploymentStatus == "Yes" {
+		o.requireDeploymentStatus = true
+	} else if requireDeploymentStatus == "No" {
+		o.requireDeploymentStatus = false
+	} else {
+		return fmt.Errorf("Unexpected requireDeploymentStatus")
+	}
+
+	return nil
+}
+
+func (o *askOpts) AskNamespace() error {
+	namespace, err := o.prompt.Get(inputNamespacePrompt, "", nil /*no validation*/)
+	if err != nil {
+		return fmt.Errorf("Prompt for env: %w", err)
+	}
+	o.Namespace = namespace
 
 	return nil
 }
