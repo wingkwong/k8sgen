@@ -28,18 +28,6 @@ const (
 	inputSecretCmdNamePrompt = "Please select the type of secret:"
 )
 
-type askVars struct {
-	*GlobalOpts
-	DeploymentCmdOpts
-	SecretCmdOpts
-
-	KindName string
-}
-
-type askOpts struct {
-	askVars
-}
-
 func newAskOpts(vars askVars) (*askOpts, error) {
 	return &askOpts{
 		askVars: vars,
