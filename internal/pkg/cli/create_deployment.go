@@ -12,11 +12,7 @@ func (o *askOpts) AskDeploymentSpecOpts() error {
 	if err := o.AskImageName(); err != nil {
 		return err
 	}
-
-	if err := o.AskOutputFormat(); err != nil {
-		return err
-	}
-
+	
 	if err := o.AskOutputInfo(); err != nil {
 		return err
 	}
