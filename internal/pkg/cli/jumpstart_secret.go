@@ -96,7 +96,7 @@ func (o *jumpStartOpts) ExecuteSecretCmd() error {
 			cmd = cmd + fmt.Sprintf("--from-env-file=%s ", o.fromEnvFile)
 		}
 
-		cmd = cmd + fmt.Sprintf("--output=%s > %s", o.fromEnvFile, o.outputFormat, o.outputPath)
+		cmd = cmd + fmt.Sprintf("--output=%s > %s", o.outputFormat, o.outputPath)
 	case tlsCmdName:
 		cmd = fmt.Sprintf("kubectl create secret tls %s --cert=%s --key=%s --output=%s --dry-run=true > %s", o.secretName, o.certPath, o.keyPath, o.outputFormat, o.outputPath)
 
