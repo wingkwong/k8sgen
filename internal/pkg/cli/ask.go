@@ -3,9 +3,9 @@ package cli
 import (
 	"errors"
 	"fmt"
-	"strconv"
-    "reflect"
 	"github.com/wingkwong/k8sgen/third_party/term/prompt"
+	"reflect"
+	"strconv"
 )
 
 const (
@@ -34,33 +34,39 @@ const (
 	inputRequireDeploymentStatusPrompt = "Do you want to input Deployment Status?"
 )
 
-type Question struct{
-	name string
-	promptMessage string
-	promptHelpMessage string
+type Question struct {
+	name               string
+	qType              string
+	promptMessage      string
+	promptHelpMessage  string
 	promptErrorMessage string
-	validation prompt.ValidatorFunc
-	opts []string
-	funcName string
+	validation         prompt.ValidatorFunc
+	opts               []string
+	funcName           string
 }
 
 var questions = map[string]Question{
-	"Kind": {"KindName", inputKindNamePrompt, "", "Select kind name", nil, kindNames, "AskSelect"},
-	"DeploymentName": {"DeploymentName", inputDeploymentNamePrompt, "", "Prompt for deployment name", validateDeploymentName, nil, "AskGet"},
+	"Kind":                    {"KindName", "string", inputKindNamePrompt, "", "Select kind name", nil, kindNames, "AskSelect"},
+	"DeploymentName":          {"DeploymentName", "string", inputDeploymentNamePrompt, "", "Prompt for deployment name", validateDeploymentName, nil, "AskGet"},
+	"Image":                   {"ImageName", "string", inputImageNamePrompt, "", "Prompt for image name", nil, nil, "AskGet"},
+	"OutputPath":              {"outputPath", "string", inputOutputPathPrompt, "", "Prompt for output path", nil, nil, "AskGet"},
+	"SecretName":              {"secretName", "string", inputSecretNamePrompt, "", "Prompt for secret name", nil, nil, "AskGet"},
+	"DockerServerName":        {"dockerServer", "string", inputDockerServerNamePrompt, "", "Prompt for docker server name", nil, nil, "AskGet"},
+	"DockerUserName":          {"dockerUserName", "string", inputDockerUserNamePrompt, "", "Prompt for docker user name", nil, nil, "AskGet"},
+	"DockerPassword":          {"dockerUserPassword", "string", inputDockerUserPasswordPrompt, "", "Prompt for docker password", nil, nil, "AskGetSecret"},
+	"DockerEmail":             {"dockerEmail", "string", inputDockerEmailPrompt, "", "Prompt for docker email", nil, nil, "AskGet"}, // TODO: email validation
+	"CertPath":                {"certPath", "string", inputDockerUserNamePrompt, "", "Prompt for cert path", nil, nil, "AskGet"},
+	"KeyPath":                 {"keyPath", "string", inputDockerUserNamePrompt, "", "Prompt for key path", nil, nil, "AskGet"},
+	"FromEnvFile":             {"fromEnvFile", "string", inputFromEnvFilePrompt, "", "Prompt for env", nil, nil, "AskGet"},
+	"Namespace":               {"namespace", "string", inputNamespacePrompt, "", "Prompt for namespace", nil, nil, "AskGet"},
+	"RequireObjectMeta":       {"requireObjectMeta", "bool", inputRequireObjectMetaPrompt, "", "Prompt for requireObjectMeta", nil, yesOrNo, "AskSelect"},
+	"RequireDeploymentSpec":   {"requireDeploymentSpec", "bool", inputRequireDeploymentSpecPrompt, "", "Prompt for requireDeploymentSpec", nil, yesOrNo, "AskSelect"},
+	"RequireDeploymentStatus": {"requireDeploymentStatus", "bool", inputRequireDeploymentStatusPrompt, "", "Prompt for requireDeploymentStatus", nil, yesOrNo, "AskSelect"},
+	"OutputFormat":            {"outputFormat", "string", inputOutputFormatPrompt, "", "Prompt for output format", nil, outputFormats, "AskSelect"},
+	"SecretCmdName":           {"secretCmdName", "string", inputSecretCmdNamePrompt, "", "Prompt for secret cmd name", nil, secretNames, "AskSelect"},
 }
 
-
-
-func getYesNoSelectOpts() []string {
-	return []string{
-		"Yes",
-		"No",
-	}
-}
-
-func getQuestionKey(key string) {
-	
-}
+var yesOrNo = []string{"Yes", "No"}
 
 func newAskOpts(vars askVars) (*askOpts, error) {
 	return &askOpts{
@@ -68,209 +74,107 @@ func newAskOpts(vars askVars) (*askOpts, error) {
 	}, nil
 }
 
-func (o *askOpts) AskGet(name string, promptMessage string, promptHelpMessage string, promptErrorMessage string, validation prompt.ValidatorFunc ) error {
+func setField(v interface{}, name string, value string, fvType string) error {
+	rv := reflect.ValueOf(v)
+	if rv.Kind() != reflect.Ptr || rv.Elem().Kind() != reflect.Struct {
+		return errors.New("v must be pointer to struct")
+	}
+
+	rv = rv.Elem()
+	fv := rv.FieldByName(name)
+	if !fv.IsValid() {
+		return fmt.Errorf("not a field name: %s", name)
+	}
+
+	if !fv.CanSet() {
+		return fmt.Errorf("cannot set field %s", name)
+	}
+
+	if fvType == "string" {
+		if fv.Kind() != reflect.String {
+			return fmt.Errorf("%s is not a string field", name)
+		}
+		fv.SetString(value)
+	} else if fvType == "int" {
+		if fv.Kind() != reflect.Int {
+			return fmt.Errorf("%s is not an int field", name)
+		}
+		val, _ := strconv.ParseInt(value, 10, 64)
+		fv.SetInt(val)
+	} else if fvType == "bool" {
+		if fv.Kind() != reflect.Bool {
+			return fmt.Errorf("%s is not a bool field", name)
+		}
+		var boolVal bool
+		if value == "Yes" {
+			boolVal = true
+		} else if value == "No" {
+			boolVal = false
+		} else {
+			return fmt.Errorf("%s is not either Yes or No", value)
+		}
+
+		fv.SetBool(boolVal)
+	}
+
+	return nil
+}
+
+func (o *askOpts) AskGet(name string, qType string, promptMessage string, promptHelpMessage string, promptErrorMessage string, validation prompt.ValidatorFunc) error {
 	val, err := o.prompt.Get(promptMessage, promptHelpMessage, validation)
 	if err != nil {
 		return fmt.Errorf("%s: %w", promptErrorMessage, err)
 	}
 
-	reflect.ValueOf(&o).Elem().Set(reflect.ValueOf(val))
-	// (*o)[name] = val
+	if err := setField(o, name, val, qType); err != nil {
+		return fmt.Errorf("%s: %w", promptErrorMessage, err)
+	}
 
 	return nil
 }
 
-func (o *askOpts) AskSelect(name string, promptMessage string, promptHelpMessage string, promptErrorMessage string, opts []string) error {
+func (o *askOpts) AskSelect(name string, qType string, promptMessage string, promptHelpMessage string, promptErrorMessage string, opts []string) error {
 	val, err := o.prompt.SelectOne(inputOutputFormatPrompt, promptHelpMessage, opts)
 	if err != nil {
 		return fmt.Errorf("%s: %w", promptErrorMessage, err)
 	}
-	
-	// o.KindName = val
-	
+
+	if err := setField(o, name, val, qType); err != nil {
+		return fmt.Errorf("%s: %w", promptErrorMessage, err)
+	}
 
 	return nil
 }
 
-func (o *askOpts) AskGetSecret(name string, promptMessage string, promptHelpMessage string, promptErrorMessage string) error {
+func (o *askOpts) AskGetSecret(name string, qType string, promptMessage string, promptHelpMessage string, promptErrorMessage string) error {
 	val, err := o.prompt.GetSecret(inputOutputFormatPrompt, promptHelpMessage)
 	if err != nil {
 		return fmt.Errorf("%s: %w", promptErrorMessage, err)
 	}
-	reflect.ValueOf(&o).Elem().FieldByName(name).SetString(val)
+
+	if err := setField(o, name, val, qType); err != nil {
+		return fmt.Errorf("%s: %w", promptErrorMessage, err)
+	}
 
 	return nil
 }
 
-func (o *askOpts) Ask(key string) error{
+func (o *askOpts) Ask(key string) error {
 	q, exists := questions[key]
 
-	if !exists { 
-		return fmt.Errorf("key not exists in questions")
+	if !exists {
+		return fmt.Errorf("key %s not exists in questions", key)
 	}
 
 	if q.funcName == "AskGet" {
-		o.AskGet(q.name, q.promptMessage, q.promptHelpMessage, q.promptErrorMessage, q.validation)
+		o.AskGet(q.name, q.qType, q.promptMessage, q.promptHelpMessage, q.promptErrorMessage, q.validation)
 	} else if q.funcName == "AskSelect" {
-		o.AskSelect(q.name, q.promptMessage, q.promptHelpMessage, q.promptErrorMessage, q.opts)
+		o.AskSelect(q.name, q.qType, q.promptMessage, q.promptHelpMessage, q.promptErrorMessage, q.opts)
 	} else if q.funcName == "AskGetSecret" {
-		o.AskGetSecret(q.name, q.promptMessage, q.promptHelpMessage, q.promptErrorMessage)
+		o.AskGetSecret(q.name, q.qType, q.promptMessage, q.promptHelpMessage, q.promptErrorMessage)
 	} else {
 		return fmt.Errorf("Unexpected q.funcName. Available options: AskGet, AskSelect, AskGetSecret")
 	}
-
-	return nil
-}
-
-func (o *askOpts) askKindName() error {
-	if o.KindName != "" {
-		return nil
-	}
-
-	names := getKindNames()
-
-	if len(names) == 0 {
-		return errors.New("No object is found")
-	}
-
-	selectedKindName, err := o.prompt.SelectOne(inputKindNamePrompt, "", names)
-	if err != nil {
-		return fmt.Errorf("Select kind name: %w", err)
-	}
-	o.KindName = selectedKindName
-	return nil
-}
-
-func (o *askOpts) AskDeploymentName() error {
-	deploymentName, err := o.prompt.Get(inputDeploymentNamePrompt, "", validateDeploymentName)
-
-	if err != nil {
-		return fmt.Errorf("Prompt for deployment name: %w", err)
-	}
-
-	o.deploymentName = deploymentName
-
-	return nil
-}
-
-func (o *askOpts) AskImageName() error {
-	imageName, err := o.prompt.Get(inputImageNamePrompt, "", nil /*no validation*/)
-	if err != nil {
-		return fmt.Errorf("Prompt for image name: %w", err)
-	}
-	o.imageName = imageName
-
-	return nil
-}
-
-func (o *askOpts) AskOutputFormat() error {
-	formats := getOutputFormats()
-	outputFormat, err := o.prompt.SelectOne(inputOutputFormatPrompt, "", formats)
-	if err != nil {
-		return fmt.Errorf("Prompt for output format: %w", err)
-	}
-	o.outputFormat = outputFormat
-
-	return nil
-}
-
-func (o *askOpts) AskOutputPath() error {
-	outputPath, err := o.prompt.Get(inputOutputPathPrompt, "", nil)
-	if err != nil {
-		return fmt.Errorf("Prompt for output path: %w", err)
-	}
-
-	// if err := VerifyDirectory(outputPath); err != nil {
-	// 	return fmt.Errorf("Failed to verify directory: %w", err)
-	// }
-
-	o.outputPath = outputPath
-	return nil
-}
-
-func (o *askOpts) AskSecretCmdName() error {
-	secrets := getSecretNames()
-	secretCmdName, err := o.prompt.SelectOne(inputSecretCmdNamePrompt, `
-docker-registry Create a secret for use with a Docker registry
-generic         Create a secret from a local file, directory or literal value
-tls             Create a TLS secret`, secrets)
-
-	if err != nil {
-		return fmt.Errorf("Prompt for secret cmd name: %w", err)
-	}
-
-	o.secretCmdName = secretCmdName
-
-	return nil
-}
-
-func (o *askOpts) AskSecretName() error {
-	secretName, err := o.prompt.Get(inputSecretNamePrompt, "", nil /*no validation*/)
-	if err != nil {
-		return fmt.Errorf("Prompt for secret name: %w", err)
-	}
-	o.secretName = secretName
-
-	return nil
-}
-
-func (o *askOpts) AskDockerServerName() error {
-	dockerServer, err := o.prompt.Get(inputDockerServerNamePrompt, "", nil /*no validation*/)
-	if err != nil {
-		return fmt.Errorf("Prompt for docker server name: %w", err)
-	}
-	o.dockerServer = dockerServer
-
-	return nil
-}
-
-func (o *askOpts) AskDockerUserName() error {
-	dockerUserName, err := o.prompt.Get(inputDockerUserNamePrompt, "", nil /*no validation*/)
-	if err != nil {
-		return fmt.Errorf("Prompt for docker username: %w", err)
-	}
-	o.dockerUserName = dockerUserName
-
-	return nil
-}
-
-func (o *askOpts) AskDockerUserPassword() error {
-	dockerUserPassword, err := o.prompt.GetSecret(inputDockerUserPasswordPrompt, "")
-	if err != nil {
-		return fmt.Errorf("Prompt for docker password: %w", err)
-	}
-	o.dockerUserPassword = dockerUserPassword
-
-	return nil
-}
-
-func (o *askOpts) AskDockerEmail() error {
-	// TODO: email validation
-	dockerEmail, err := o.prompt.Get(inputDockerEmailPrompt, "", nil /*no validation*/)
-	if err != nil {
-		return fmt.Errorf("Prompt for docker email: %w", err)
-	}
-	o.dockerEmail = dockerEmail
-
-	return nil
-}
-
-func (o *askOpts) AskCertPath() error {
-	certPath, err := o.prompt.Get(inputDockerUserNamePrompt, "", nil /*no validation*/)
-	if err != nil {
-		return fmt.Errorf("Prompt for cert path: %w", err)
-	}
-	o.certPath = certPath
-
-	return nil
-}
-
-func (o *askOpts) AskKeyPath() error {
-	keyPath, err := o.prompt.Get(inputDockerUserNamePrompt, "", nil /*no validation*/)
-	if err != nil {
-		return fmt.Errorf("Prompt for key path: %w", err)
-	}
-	o.keyPath = keyPath
 
 	return nil
 }
@@ -307,28 +211,20 @@ func (o *askOpts) AskFromLiteral() error {
 	return nil
 }
 
-func (o *askOpts) AskFromEnv() error {
-	fromEnvFile, err := o.prompt.Get(inputFromEnvFilePrompt, "", nil /*no validation*/)
-	if err != nil {
-		return fmt.Errorf("Prompt for env: %w", err)
-	}
-	o.fromEnvFile = fromEnvFile
-
-	return nil
-}
-
 func (o *askOpts) AskOutputInfo() error {
-	if err := o.AskOutputFormat(); err != nil {
+
+	if err := o.Ask("OutputFormat"); err != nil {
 		return err
 	}
 
-	if err := o.AskOutputPath(); err != nil {
+	if err := o.Ask("OutputPath"); err != nil {
 		return err
 	}
 
 	return nil
 }
 
+// TODO: refak
 func (o *askOpts) AskFromFileIteration() error {
 	// TODO: int vaildation
 	noOfIterationStr, err := o.prompt.Get(inputNoOfFromFileIterationPrompt, "", nil /*no validation*/)
@@ -345,6 +241,7 @@ func (o *askOpts) AskFromFileIteration() error {
 	return nil
 }
 
+// TODO: refak
 func (o *askOpts) AskFromLiteralIteration() error {
 	// TODO: int vaildation
 	noOfFromLiteralIterationStr, err := o.prompt.Get(inputNoOfFromLiteralIterationPrompt, "", nil /*no validation*/)
@@ -354,72 +251,6 @@ func (o *askOpts) AskFromLiteralIteration() error {
 
 	noOfFromLiteralIteration, err := strconv.Atoi(noOfFromLiteralIterationStr)
 	o.noOfFromLiteralIteration = noOfFromLiteralIteration
-
-	return nil
-}
-
-// ask for building k8s spec
-
-func (o *askOpts) AskRequireObjectMeta() error {
-	opts := getYesNoSelectOpts()
-	requireObjectMeta, err := o.prompt.SelectOne(inputRequireObjectMetaPrompt, "" /* TODO: may add help text*/, opts)
-	if err != nil {
-		return fmt.Errorf("Prompt for AskRequireObjectMeta: %w", err)
-	}
-
-	if requireObjectMeta == "Yes" {
-		o.requireObjectMeta = true
-	} else if requireObjectMeta == "No" {
-		o.requireObjectMeta = false
-	} else {
-		return fmt.Errorf("Unexpected requireObjectMeta")
-	}
-
-	return nil
-}
-
-func (o *askOpts) AskRequireDeploymentSpec() error {
-	opts := getYesNoSelectOpts()
-	requireDeploymentSpec, err := o.prompt.SelectOne(inputRequireDeploymentSpecPrompt, "" /* TODO: may add help text*/, opts)
-	if err != nil {
-		return fmt.Errorf("Prompt for AskRequireDeploymentSpec: %w", err)
-	}
-
-	if requireDeploymentSpec == "Yes" {
-		o.requireDeploymentSpec = true
-	} else if requireDeploymentSpec == "No" {
-		o.requireDeploymentSpec = false
-	} else {
-		return fmt.Errorf("Unexpected requireDeploymentSpec")
-	}
-
-	return nil
-}
-
-func (o *askOpts) AskRequireDeploymentStatus() error {
-	opts := getYesNoSelectOpts()
-	requireDeploymentStatus, err := o.prompt.SelectOne(inputRequireDeploymentStatusPrompt, "" /* TODO: may add help text*/, opts)
-	if err != nil {
-		return fmt.Errorf("Prompt for AskRequireDeploymentStatus: %w", err)
-	}
-
-	if requireDeploymentStatus == "Yes" {
-		o.requireDeploymentStatus = true
-	} else if requireDeploymentStatus == "No" {
-		o.requireDeploymentStatus = false
-	} else {
-		return fmt.Errorf("Unexpected requireDeploymentStatus")
-	}
-
-	return nil
-}
-
-func (o *askOpts) AskNamespace() error {
-	namespace, err := o.prompt.Get(inputNamespacePrompt, "", nil /*no validation*/)
-	if err != nil {
-		return fmt.Errorf("Prompt for env: %w", err)
-	}
-	o.Namespace = namespace
 
 	return nil
 }
