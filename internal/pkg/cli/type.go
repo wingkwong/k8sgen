@@ -35,7 +35,6 @@ type getSelectOptsFn func()
 
 type DeploymentCmdOpts struct {
 	// Name of the Deployment
-	DeploymentName string
 	deploymentName string
 	// Name of the image
 	imageName string
