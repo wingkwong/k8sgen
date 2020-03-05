@@ -14,7 +14,7 @@ func (o *jumpStartOpts) ExecutePriorityClassCmd() error {
 	cmd := ""
 
 	if err := ExecCmd(cmd); err != nil {
-		return fmt.Errorf("Failed To execute command `%s` \n %w", cmd, err)
+		return fmt.Errorf("Failed To execute command `%s` \n %s", cmd, err.Error())
 	}
 
 	return nil
