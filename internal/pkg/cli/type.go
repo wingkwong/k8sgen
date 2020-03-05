@@ -104,9 +104,9 @@ type DeploymentStatusOpts struct {
 }
 
 type k8s struct {
-	metav1.ObjectMeta
-	metav1.TypeMeta
-	appsv1.Deployment
-	appsv1.DeploymentSpec
-	appsv1.DeploymentStatus
+	ObjectMeta       metav1.ObjectMeta
+	TypeMeta         metav1.TypeMeta
+	Deployment       appsv1.Deployment
+	DeploymentSpec   appsv1.DeploymentSpec
+	DeploymentStatus appsv1.DeploymentStatus
 }

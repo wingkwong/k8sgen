@@ -32,7 +32,7 @@ func (o *askOpts) ExecuteCreateDeploymentSpec() error {
 
 		// Deployment > ObjectMeta
 		objectMeta = metav1.ObjectMeta{
-			Name: o.Name,
+			Name: o.askVars.k8s.ObjectMeta.Name,
 		}
 
 	}
@@ -102,15 +102,14 @@ func (o *askOpts) ExecuteCreateDeploymentSpec() error {
 
 		// Deployment > DeploymentSpec
 		spec = appsv1.DeploymentSpec{
-			// FIXME: ambiguous selector
-			// Replicas: int32Ptr(o.Replicas),
+			Replicas: int32Ptr(*o.askVars.k8s.DeploymentSpec.Replicas),
 			Selector: labelSelector,
 			Template: podTemplateSpec,
 			// Strategy:                nil,
-			MinReadySeconds:         o.MinReadySeconds,
-			RevisionHistoryLimit:    o.RevisionHistoryLimit,
-			Paused:                  o.Paused,
-			ProgressDeadlineSeconds: o.ProgressDeadlineSeconds,
+			MinReadySeconds:         o.askVars.k8s.DeploymentSpec.MinReadySeconds,
+			RevisionHistoryLimit:    o.askVars.k8s.DeploymentSpec.RevisionHistoryLimit,
+			Paused:                  o.askVars.k8s.DeploymentSpec.Paused,
+			ProgressDeadlineSeconds: o.askVars.k8s.DeploymentSpec.ProgressDeadlineSeconds,
 		}
 
 	}
