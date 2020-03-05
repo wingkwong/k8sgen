@@ -15,14 +15,14 @@ type GlobalOpts struct {
 
 type askVars struct {
 	*GlobalOpts
+	KindName string
+	// Cmd Opts
 	DeploymentCmdOpts
 	SecretCmdOpts
-
+	// Create Opts
 	DeploymentOpts
-
+	//External
 	k8s
-
-	KindName string
 }
 
 type askOpts struct {
@@ -78,7 +78,6 @@ type DeploymentOpts struct {
 	requireObjectMeta       bool
 	requireDeploymentSpec   bool
 	requireDeploymentStatus bool
-
 	// DeploymentSpec
 	DeploymentSpecOpts
 	// DeploymentStatus
