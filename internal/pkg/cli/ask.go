@@ -25,6 +25,12 @@ const (
 	inputNoOfFromFileIterationPrompt    = "How many from-file iterations for your input?"
 	inputNoOfFromLiteralIterationPrompt = "How many from-literal iterations for your input?"
 	inputNamespacePrompt                = "Please input the namespace you want to create in:"
+	inputObjectMetaNamePrompt           = "What ObjectMeta you want to name?"
+	inputReplicasPrompt                 = "How many replicas you want to create?"
+	inputMinReadySecondsPrompt          = "How many seconds for which a newly created pod should be ready"
+	inputRevisionHistoryLimitPrompt     = "How many old ReplicaSets to retain to allow rollback?"
+	inputPausedPrompt                   = "Is the deployment paused?"
+	inputProgressDeadlineSecondsPrompt  = "How many seconds for a deployment to make progress before it is considered to be failed?"
 
 	// select
 	inputOutputFormatPrompt            = "Please select an output format:"
@@ -58,7 +64,7 @@ var questions = map[string]Question{
 	"CertPath":                 {"certPath", "string", inputDockerUserNamePrompt, "", "Prompt for cert path", nil /*no validation*/, nil, "AskGet"},
 	"KeyPath":                  {"keyPath", "string", inputDockerUserNamePrompt, "", "Prompt for key path", nil /*no validation*/, nil, "AskGet"},
 	"FromEnvFile":              {"fromEnvFile", "string", inputFromEnvFilePrompt, "", "Prompt for env", nil /*no validation*/, nil, "AskGet"},
-	"Namespace":                {"namespace", "string", inputNamespacePrompt, "", "Prompt for namespace", nil /*no validation*/, nil, "AskGet"},
+	"Namespace":                {"Namespace", "string", inputNamespacePrompt, "", "Prompt for namespace", nil /*no validation*/, nil, "AskGet"},
 	"RequireObjectMeta":        {"requireObjectMeta", "bool", inputRequireObjectMetaPrompt, "", "Prompt for requireObjectMeta", nil /*no validation*/, yesOrNo, "AskSelect"},
 	"RequireDeploymentSpec":    {"requireDeploymentSpec", "bool", inputRequireDeploymentSpecPrompt, "", "Prompt for requireDeploymentSpec", nil /*no validation*/, yesOrNo, "AskSelect"},
 	"RequireDeploymentStatus":  {"requireDeploymentStatus", "bool", inputRequireDeploymentStatusPrompt, "", "Prompt for requireDeploymentStatus", nil /*no validation*/, yesOrNo, "AskSelect"},
@@ -66,6 +72,12 @@ var questions = map[string]Question{
 	"SecretCmdName":            {"secretCmdName", "string", inputSecretCmdNamePrompt, "", "Prompt for secret cmd name", nil /*no validation*/, secretNames, "AskSelect"},
 	"NoOfFromFileIteration":    {"noOfFromFileIteration", "int", inputNoOfFromFileIterationPrompt, "", "Prompt for from-file iteration", nil /*no validation*/, nil, "AskGet"},
 	"NoOfFromLiteralIteration": {"noOfFromLiteralIteration", "int", inputNoOfFromLiteralIterationPrompt, "", "Prompt for from-literal iteration", nil /*no validation*/, nil, "AskGet"},
+	"ObjectMetaName":           {"Name", "string", inputObjectMetaNamePrompt, "", "Prompt for object meta name", nil /*no validation*/, nil, "AskGet"},
+	"Replicas":                 {"Replicas", "int", inputReplicasPrompt, "", "Prompt for replicas", nil /*no validation*/, nil, "AskGet"},
+	"MinReadySeconds":          {"MinReadySeconds", "int", inputMinReadySecondsPrompt, "", "Prompt for MinReadySeconds", nil /*no validation*/, nil, "AskGet"},
+	"RevisionHistoryLimit":     {"RevisionHistoryLimit", "int", inputRevisionHistoryLimitPrompt, "", "Prompt for RevisionHistoryLimit", nil /*no validation*/, nil, "AskGet"},
+	"Paused":                   {"Paused", "bool", inputPausedPrompt, "", "Prompt for Paused", nil /*no validation*/, nil, "AskGet"},
+	"ProgressDeadlineSeconds":  {"ProgressDeadlineSeconds", "int", inputProgressDeadlineSecondsPrompt, "", "Prompt for ProgressDeadlineSeconds", nil /*no validation*/, nil, "AskGet"},
 }
 
 var yesOrNo = []string{"Yes", "No"}
