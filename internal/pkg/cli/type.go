@@ -1,6 +1,7 @@
 package cli
 
 import (
+	appsv1 "k8s.io/api/apps/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -105,4 +106,7 @@ type DeploymentStatusOpts struct {
 type k8s struct {
 	metav1.ObjectMeta
 	metav1.TypeMeta
+	appsv1.Deployment
+	appsv1.DeploymentSpec
+	appsv1.DeploymentStatus
 }
