@@ -5,34 +5,29 @@ import (
 )
 
 func (o *askOpts) AskSecretCmdOpts() error {
-	if err := o.AskSecretCmdName(); err != nil {
+	if err := o.Ask("SecretCmdName"); err != nil {
 		return err
 	}
 
 	switch o.secretCmdName {
 	case dockerRegistryCmdName:
-		if err := o.AskSecretName(); err != nil {
+		if err := o.Ask("SecretName"); err != nil {
 			return err
 		}
-
-		if err := o.AskDockerServerName(); err != nil {
+		if err := o.Ask("DockerServerName"); err != nil {
 			return err
 		}
-
-		if err := o.AskDockerUserName(); err != nil {
+		if err := o.Ask("DockerUserName"); err != nil {
 			return err
 		}
-
-		if err := o.AskDockerUserPassword(); err != nil {
+		if err := o.Ask("DockerPassword"); err != nil {
 			return err
 		}
-
-		if err := o.AskDockerEmail(); err != nil {
+		if err := o.Ask("DockerEmail"); err != nil {
 			return err
 		}
-
 	case genericCmdName:
-		if err := o.AskSecretName(); err != nil {
+		if err := o.Ask("SecretName"); err != nil {
 			return err
 		}
 
@@ -46,21 +41,21 @@ func (o *askOpts) AskSecretCmdOpts() error {
 
 		// from-env-file cannot be combined with from-file or from-literal
 		if len(o.fromLiteral) == 0 && len(o.fromFile) == 0 {
-			if err := o.AskFromEnv(); err != nil {
+			if err := o.Ask("FromEnvFile"); err != nil {
 				return err
 			}
 		}
 
 	case tlsCmdName:
-		if err := o.AskSecretName(); err != nil {
+		if err := o.Ask("SecretName"); err != nil {
 			return err
 		}
 
-		if err := o.AskCertPath(); err != nil {
+		if err := o.Ask("CertPath"); err != nil {
 			return err
 		}
 
-		if err := o.AskKeyPath(); err != nil {
+		if err := o.Ask("KeyPath"); err != nil {
 			return err
 		}
 	default:

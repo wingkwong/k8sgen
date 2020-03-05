@@ -5,11 +5,11 @@ import (
 )
 
 func (o *askOpts) AskDeploymentCmdOpts() error {
-	if err := o.AskDeploymentName(); err != nil {
+	if err := o.Ask("DeploymentName"); err != nil {
 		return err
 	}
 
-	if err := o.AskImageName(); err != nil {
+	if err := o.Ask("Image"); err != nil {
 		return err
 	}
 

@@ -13,23 +13,23 @@ func int32Ptr(i int32) *int32 { return &i }
 
 func (o *askOpts) AskDeploymentSpecOpts() error {
 
-	if err := o.AskRequireObjectMeta(); err != nil {
+	if err := o.Ask("RequireObjectMeta"); err != nil {
 		return err
 	}
 
 	if o.requireObjectMeta {
 		// Name
-		if err := o.AskDeploymentName(); err != nil {
+		if err := o.Ask("Kind"); err != nil {
 			return err
 		}
 
 		// Namespace
-		if err := o.AskNamespace(); err != nil {
+		if err := o.Ask("Namespace"); err != nil {
 			return err
 		}
 	}
 
-	if err := o.AskRequireDeploymentSpec(); err != nil {
+	if err := o.Ask("RequireDeploymentSpec"); err != nil {
 		return err
 	}
 
@@ -45,7 +45,7 @@ func (o *askOpts) AskDeploymentSpecOpts() error {
 
 	}
 
-	if err := o.AskRequireDeploymentStatus(); err != nil {
+	if err := o.Ask("RequireDeploymentStatus"); err != nil {
 		return err
 	}
 
@@ -60,11 +60,11 @@ func (o *askOpts) AskDeploymentSpecOpts() error {
 		// CollisionCount
 	}
 
-	if err := o.AskDeploymentName(); err != nil {
+	if err := o.Ask("DeploymentName"); err != nil {
 		return err
 	}
 
-	if err := o.AskImageName(); err != nil {
+	if err := o.Ask("Image"); err != nil {
 		return err
 	}
 
@@ -76,40 +76,57 @@ func (o *askOpts) AskDeploymentSpecOpts() error {
 }
 
 func (o *askOpts) ExecuteDeploymentSpec() error {
-	deployment := &appsv1.Deployment{
+
+	// Deployment > DeploymentSpec > PodTemplateSpec > PodSpec
+	podSpec := apiv1.PodSpec{
+		Containers: []apiv1.Container{
+			{
+				Name:  "web",
+				Image: "nginx:1.12",
+				Ports: []apiv1.ContainerPort{
+					{
+						Name:          "http",
+						Protocol:      apiv1.ProtocolTCP,
+						ContainerPort: 80,
+					},
+				},
+			},
+		},
+	}
+
+	// Deployment > DeploymentSpec > LabelSelector
+	labelSelector := &metav1.LabelSelector{
+		MatchLabels: map[string]string{
+			"app": "demo",
+		},
+	}
+
+	// Deployment > DeploymentSpec > PodTemplateSpec
+	podTemplateSpec := apiv1.PodTemplateSpec{
 		ObjectMeta: metav1.ObjectMeta{
-			Name: "demo-deployment",
-		},
-		Spec: appsv1.DeploymentSpec{
-			Replicas: int32Ptr(2),
-			Selector: &metav1.LabelSelector{
-				MatchLabels: map[string]string{
-					"app": "demo",
-				},
-			},
-			Template: apiv1.PodTemplateSpec{
-				ObjectMeta: metav1.ObjectMeta{
-					Labels: map[string]string{
-						"app": "demo",
-					},
-				},
-				Spec: apiv1.PodSpec{
-					Containers: []apiv1.Container{
-						{
-							Name:  "web",
-							Image: "nginx:1.12",
-							Ports: []apiv1.ContainerPort{
-								{
-									Name:          "http",
-									Protocol:      apiv1.ProtocolTCP,
-									ContainerPort: 80,
-								},
-							},
-						},
-					},
-				},
+			Labels: map[string]string{
+				"app": "demo",
 			},
 		},
+		Spec: podSpec,
+	}
+
+	// Deployment > ObjectMeta
+	objectMeta := metav1.ObjectMeta{
+		Name: "demo-deployment",
+	}
+
+	// Deployment > DeploymentSpec
+	spec := appsv1.DeploymentSpec{
+		Replicas: int32Ptr(2),
+		Selector: labelSelector,
+		Template: podTemplateSpec,
+	}
+
+	// Deployment
+	deployment := &appsv1.Deployment{
+		ObjectMeta: objectMeta,
+		Spec:       spec,
 	}
 
 	b, err := json.Marshal(deployment)
