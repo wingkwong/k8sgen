@@ -26,7 +26,7 @@ func (o *askOpts) ExecuteDeploymentCmd() error {
 	//       --image=[]: Image name to run.
 	//   -o, --output='': Output format. One of: json|yaml|name|go-template|go-template-file|template|templatefile|jsonpath|jsonpath-file.
 
-	cmd := fmt.Sprintf("kubectl create deployment %s --image=%s --output=%s --dry-run=true > %s", o.deploymentName, o.imageName, o.outputFormat, o.outputPath)
+	cmd := fmt.Sprintf("kubectl create deployment %s --image=%s --output=%s --dry-run=true > %s", o.DeploymentName, o.ImageName, o.OutputFormat, o.OutputPath)
 
 	if err := ExecCmd(cmd); err != nil {
 		return fmt.Errorf("Failed To execute command: \n %w", err)

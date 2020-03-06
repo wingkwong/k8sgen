@@ -9,7 +9,7 @@ func (o *askOpts) AskSecretCmdOpts() error {
 		return err
 	}
 
-	switch o.secretCmdName {
+	switch o.SecretCmdName {
 	case dockerRegistryCmdName:
 		if err := o.Ask("SecretName"); err != nil {
 			return err
@@ -40,7 +40,7 @@ func (o *askOpts) AskSecretCmdOpts() error {
 		}
 
 		// from-env-file cannot be combined with from-file or from-literal
-		if len(o.fromLiteral) == 0 && len(o.fromFile) == 0 {
+		if len(o.FromLiteral) == 0 && len(o.FromFile) == 0 {
 			if err := o.Ask("FromEnvFile"); err != nil {
 				return err
 			}
@@ -59,7 +59,7 @@ func (o *askOpts) AskSecretCmdOpts() error {
 			return err
 		}
 	default:
-		return fmt.Errorf("No available Secret option: %s", o.secretCmdName)
+		return fmt.Errorf("No available Secret option: %s", o.SecretCmdName)
 	}
 
 	if err := o.AskOutputInfo(); err != nil {
@@ -73,30 +73,30 @@ func (o *askOpts) ExecuteSecretCmd() error {
 
 	var cmd string
 
-	switch o.secretCmdName {
+	switch o.SecretCmdName {
 	case dockerRegistryCmdName:
-		cmd = fmt.Sprintf("kubectl create secret docker-registry %s --docker-server=%s --docker-username=%s --docker-password=%s --docker-email=%s --output=%s--dry-run=true > %s", o.secretName, o.dockerServer, o.dockerUserName, o.dockerUserPassword, o.dockerEmail, o.outputFormat, o.outputPath)
+		cmd = fmt.Sprintf("kubectl create secret docker-registry %s --docker-server=%s --docker-username=%s --docker-password=%s --docker-email=%s --output=%s--dry-run=true > %s", o.SecretName, o.DockerServer, o.DockerUserName, o.DockerUserPassword, o.DockerEmail, o.OutputFormat, o.OutputPath)
 	case genericCmdName:
-		cmd = fmt.Sprintf("kubectl create secret generic %s ", o.secretName)
+		cmd = fmt.Sprintf("kubectl create secret generic %s ", o.SecretName)
 
-		for i := 0; i < o.noOfFromFileIteration; i++ {
-			cmd = cmd + fmt.Sprintf("--from-file=%s ", o.fromFile[i])
+		for i := 0; i < o.NoOfFromFileIteration; i++ {
+			cmd = cmd + fmt.Sprintf("--from-file=%s ", o.FromFile[i])
 		}
 
-		for i := 0; i < o.noOfFromLiteralIteration; i++ {
-			cmd = cmd + fmt.Sprintf("--from-literal=%s ", o.fromLiteral[i])
+		for i := 0; i < o.NoOfFromLiteralIteration; i++ {
+			cmd = cmd + fmt.Sprintf("--from-literal=%s ", o.FromLiteral[i])
 		}
 
-		if len(o.fromLiteral) == 0 && len(o.fromFile) == 0 && o.fromEnvFile != "" {
-			cmd = cmd + fmt.Sprintf("--from-env-file=%s ", o.fromEnvFile)
+		if len(o.FromLiteral) == 0 && len(o.FromFile) == 0 && o.FromEnvFile != "" {
+			cmd = cmd + fmt.Sprintf("--from-env-file=%s ", o.FromEnvFile)
 		}
 
-		cmd = cmd + fmt.Sprintf("--output=%s > %s", o.outputFormat, o.outputPath)
+		cmd = cmd + fmt.Sprintf("--output=%s > %s", o.OutputFormat, o.OutputPath)
 	case tlsCmdName:
-		cmd = fmt.Sprintf("kubectl create secret tls %s --cert=%s --key=%s --output=%s --dry-run=true > %s", o.secretName, o.certPath, o.keyPath, o.outputFormat, o.outputPath)
+		cmd = fmt.Sprintf("kubectl create secret tls %s --cert=%s --key=%s --output=%s --dry-run=true > %s", o.SecretName, o.CertPath, o.KeyPath, o.OutputFormat, o.OutputPath)
 
 	default:
-		return fmt.Errorf("No execution available for Secret: %s", o.secretCmdName)
+		return fmt.Errorf("No execution available for Secret: %s", o.SecretCmdName)
 	}
 
 	if err := ExecCmd(cmd); err != nil {

@@ -55,23 +55,23 @@ var questions = map[string]Question{
 	"Kind":                     {"KindName", "string", inputKindNamePrompt, "", "Select kind name", nil /*no validation*/, kindNames, "AskSelect"},
 	"DeploymentName":           {"DeploymentName", "string", inputDeploymentNamePrompt, "", "Prompt for deployment name", validateDeploymentName, nil, "AskGet"},
 	"Image":                    {"ImageName", "string", inputImageNamePrompt, "", "Prompt for image name", nil /*no validation*/, nil, "AskGet"},
-	"OutputPath":               {"outputPath", "string", inputOutputPathPrompt, "", "Prompt for output path", nil /*no validation*/, nil, "AskGet"},
-	"SecretName":               {"secretName", "string", inputSecretNamePrompt, "", "Prompt for secret name", nil /*no validation*/, nil, "AskGet"},
-	"DockerServerName":         {"dockerServer", "string", inputDockerServerNamePrompt, "", "Prompt for docker server name", nil /*no validation*/, nil, "AskGet"},
-	"DockerUserName":           {"dockerUserName", "string", inputDockerUserNamePrompt, "", "Prompt for docker user name", nil /*no validation*/, nil, "AskGet"},
-	"DockerPassword":           {"dockerUserPassword", "string", inputDockerUserPasswordPrompt, "", "Prompt for docker password", nil /*no validation*/, nil, "AskGetSecret"},
-	"DockerEmail":              {"dockerEmail", "string", inputDockerEmailPrompt, "", "Prompt for docker email", nil /*no validation*/, nil, "AskGet"}, // TODO: email validation
-	"CertPath":                 {"certPath", "string", inputDockerUserNamePrompt, "", "Prompt for cert path", nil /*no validation*/, nil, "AskGet"},
-	"KeyPath":                  {"keyPath", "string", inputDockerUserNamePrompt, "", "Prompt for key path", nil /*no validation*/, nil, "AskGet"},
-	"FromEnvFile":              {"fromEnvFile", "string", inputFromEnvFilePrompt, "", "Prompt for env", nil /*no validation*/, nil, "AskGet"},
+	"OutputPath":               {"OutputPath", "string", inputOutputPathPrompt, "", "Prompt for output path", nil /*no validation*/, nil, "AskGet"},
+	"SecretName":               {"SecretName", "string", inputSecretNamePrompt, "", "Prompt for secret name", nil /*no validation*/, nil, "AskGet"},
+	"DockerServerName":         {"DockerServer", "string", inputDockerServerNamePrompt, "", "Prompt for docker server name", nil /*no validation*/, nil, "AskGet"},
+	"DockerUserName":           {"DockerUserName", "string", inputDockerUserNamePrompt, "", "Prompt for docker user name", nil /*no validation*/, nil, "AskGet"},
+	"DockerPassword":           {"DockerUserPassword", "string", inputDockerUserPasswordPrompt, "", "Prompt for docker password", nil /*no validation*/, nil, "AskGetSecret"},
+	"DockerEmail":              {"DockerEmail", "string", inputDockerEmailPrompt, "", "Prompt for docker email", nil /*no validation*/, nil, "AskGet"}, // TODO: email validation
+	"CertPath":                 {"CertPath", "string", inputDockerUserNamePrompt, "", "Prompt for cert path", nil /*no validation*/, nil, "AskGet"},
+	"KeyPath":                  {"KeyPath", "string", inputDockerUserNamePrompt, "", "Prompt for key path", nil /*no validation*/, nil, "AskGet"},
+	"FromEnvFile":              {"FromEnvFile", "string", inputFromEnvFilePrompt, "", "Prompt for env", nil /*no validation*/, nil, "AskGet"},
 	"Namespace":                {"Namespace", "string", inputNamespacePrompt, "", "Prompt for namespace", nil /*no validation*/, nil, "AskGet"},
 	"RequireObjectMeta":        {"RequireObjectMeta", "bool", inputRequireObjectMetaPrompt, "", "Prompt for requireObjectMeta", nil /*no validation*/, yesOrNo, "AskSelect"},
-	"RequireDeploymentSpec":    {"requireDeploymentSpec", "bool", inputRequireDeploymentSpecPrompt, "", "Prompt for requireDeploymentSpec", nil /*no validation*/, yesOrNo, "AskSelect"},
-	"RequireDeploymentStatus":  {"requireDeploymentStatus", "bool", inputRequireDeploymentStatusPrompt, "", "Prompt for requireDeploymentStatus", nil /*no validation*/, yesOrNo, "AskSelect"},
-	"OutputFormat":             {"outputFormat", "string", inputOutputFormatPrompt, "", "Prompt for output format", nil /*no validation*/, outputFormats, "AskSelect"},
-	"SecretCmdName":            {"secretCmdName", "string", inputSecretCmdNamePrompt, "", "Prompt for secret cmd name", nil /*no validation*/, secretNames, "AskSelect"},
-	"NoOfFromFileIteration":    {"noOfFromFileIteration", "int", inputNoOfFromFileIterationPrompt, "", "Prompt for from-file iteration", nil /*no validation*/, nil, "AskGet"},
-	"NoOfFromLiteralIteration": {"noOfFromLiteralIteration", "int", inputNoOfFromLiteralIterationPrompt, "", "Prompt for from-literal iteration", nil /*no validation*/, nil, "AskGet"},
+	"RequireDeploymentSpec":    {"RequireDeploymentSpec", "bool", inputRequireDeploymentSpecPrompt, "", "Prompt for requireDeploymentSpec", nil /*no validation*/, yesOrNo, "AskSelect"},
+	"RequireDeploymentStatus":  {"RequireDeploymentStatus", "bool", inputRequireDeploymentStatusPrompt, "", "Prompt for requireDeploymentStatus", nil /*no validation*/, yesOrNo, "AskSelect"},
+	"OutputFormat":             {"OutputFormat", "string", inputOutputFormatPrompt, "", "Prompt for output format", nil /*no validation*/, outputFormats, "AskSelect"},
+	"SecretCmdName":            {"SecretCmdName", "string", inputSecretCmdNamePrompt, "", "Prompt for secret cmd name", nil /*no validation*/, secretNames, "AskSelect"},
+	"NoOfFromFileIteration":    {"NoOfFromFileIteration", "int", inputNoOfFromFileIterationPrompt, "", "Prompt for from-file iteration", nil /*no validation*/, nil, "AskGet"},
+	"NoOfFromLiteralIteration": {"NoOfFromLiteralIteration", "int", inputNoOfFromLiteralIterationPrompt, "", "Prompt for from-literal iteration", nil /*no validation*/, nil, "AskGet"},
 	"ObjectMetaName":           {"Name", "string", inputObjectMetaNamePrompt, "", "Prompt for object meta name", nil /*no validation*/, nil, "AskGet"},
 	"Replicas":                 {"Replicas", "int", inputReplicasPrompt, "", "Prompt for replicas", nil /*no validation*/, nil, "AskGet"},
 	"MinReadySeconds":          {"MinReadySeconds", "int", inputMinReadySecondsPrompt, "", "Prompt for MinReadySeconds", nil /*no validation*/, nil, "AskGet"},
@@ -258,12 +258,12 @@ func (o *askOpts) AskFromFilePath() error {
 		return err
 	}
 
-	for i := 0; i < o.noOfFromFileIteration; i++ {
+	for i := 0; i < o.NoOfFromFileIteration; i++ {
 		fromFile, err := o.prompt.Get(inputFromFilePrompt, "", nil /*no validation*/)
 		if err != nil {
 			return fmt.Errorf("Prompt for from-file: %w", err)
 		}
-		o.fromFile = append(o.fromFile, fromFile)
+		o.FromFile = append(o.FromFile, fromFile)
 	}
 
 	return nil
@@ -274,12 +274,12 @@ func (o *askOpts) AskFromLiteral() error {
 		return err
 	}
 
-	for i := 0; i < o.noOfFromLiteralIteration; i++ {
+	for i := 0; i < o.NoOfFromLiteralIteration; i++ {
 		fromLiteral, err := o.prompt.Get(inputFromLiteralPrompt, "", nil /*no validation*/)
 		if err != nil {
 			return fmt.Errorf("Prompt for from-literal: %w", err)
 		}
-		o.fromLiteral = append(o.fromLiteral, fromLiteral)
+		o.FromLiteral = append(o.FromLiteral, fromLiteral)
 	}
 
 	return nil

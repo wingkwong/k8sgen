@@ -9,9 +9,9 @@ type GlobalOpts struct {
 	// Global Prompter
 	prompt prompter
 	// Output Format: json / yaml
-	outputFormat string
+	OutputFormat string
 	// Output Directory where a resource file is saved
-	outputPath string
+	OutputPath string
 }
 
 type askVars struct {
