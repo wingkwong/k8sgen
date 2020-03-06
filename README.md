@@ -68,28 +68,6 @@ spec:
 status: {}
 ```
 
-``k8sgen create`` - create a complex resource file from scratch 
-
-```bash
-k8sgen create
-
-? What kind of object you want to create? [Use arrows to move, type to filter]
-  ClusterRole
-  ClusterRoleBinding
-  Configmap
-> Deployment
-  Job
-  Namespace
-  PodDisruptionBudget
-  PriorityClass
-  Quota
-  Role
-  RoleBinding
-  Secret
-  Service
-  ServiceAccount
-```
-
 ## Contributing
 
 The k8sgen project adheres to the [CNCF Code of
