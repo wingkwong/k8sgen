@@ -40,42 +40,42 @@ type getSelectOptsFn func()
 
 type DeploymentCmdOpts struct {
 	// Name of the Deployment
-	deploymentName string
+	DeploymentName string
 	// Name of the image
-	imageName string
+	ImageName string
 }
 
 type SecretCmdOpts struct {
 	// Type of Secret
-	secretCmdName string
+	SecretCmdName string
 	// Name of Secret to-be-created
-	secretName string
+	SecretName string
 	// Server location for Docker registry
-	dockerServer string
+	DockerServer string
 	// Username for Docker registry authentication
-	dockerUserName string
+	DockerUserName string
 	// Password for Docker registry authentication
-	dockerUserPassword string
+	DockerUserPassword string
 	// Email for Docker registry
-	dockerEmail string
+	DockerEmail string
 	// Key files can be specified using their file path, in which case a default name will be given to them
 	// or optionally with a name and file path, in which case the given name will be used
 	// Specifying a directory will iterate each named file in the directory that is a valid secret key
-	fromFile []string
+	FromFile []string
 	// Append a hash of the secret to its name
-	appendHash bool
+	AppendHash bool
 	// Secret cert path
-	certPath string
+	CertPath string
 	// Secret key path
-	keyPath string
+	KeyPath string
 	// Secret from Literal input
-	fromLiteral []string
+	FromLiteral []string
 	// Secret from environment file
-	fromEnvFile string
+	FromEnvFile string
 	// Number of iteration for the same question for fromFile
-	noOfFromFileIteration int
+	NoOfFromFileIteration int
 	// Number of iteration for the same question for fromLiteral
-	noOfFromLiteralIteration int
+	NoOfFromLiteralIteration int
 }
 
 type DeploymentOpts struct {
