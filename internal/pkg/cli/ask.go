@@ -65,7 +65,7 @@ var questions = map[string]Question{
 	"KeyPath":                  {"keyPath", "string", inputDockerUserNamePrompt, "", "Prompt for key path", nil /*no validation*/, nil, "AskGet"},
 	"FromEnvFile":              {"fromEnvFile", "string", inputFromEnvFilePrompt, "", "Prompt for env", nil /*no validation*/, nil, "AskGet"},
 	"Namespace":                {"Namespace", "string", inputNamespacePrompt, "", "Prompt for namespace", nil /*no validation*/, nil, "AskGet"},
-	"RequireObjectMeta":        {"requireObjectMeta", "bool", inputRequireObjectMetaPrompt, "", "Prompt for requireObjectMeta", nil /*no validation*/, yesOrNo, "AskSelect"},
+	"RequireObjectMeta":        {"RequireObjectMeta", "bool", inputRequireObjectMetaPrompt, "", "Prompt for requireObjectMeta", nil /*no validation*/, yesOrNo, "AskSelect"},
 	"RequireDeploymentSpec":    {"requireDeploymentSpec", "bool", inputRequireDeploymentSpecPrompt, "", "Prompt for requireDeploymentSpec", nil /*no validation*/, yesOrNo, "AskSelect"},
 	"RequireDeploymentStatus":  {"requireDeploymentStatus", "bool", inputRequireDeploymentStatusPrompt, "", "Prompt for requireDeploymentStatus", nil /*no validation*/, yesOrNo, "AskSelect"},
 	"OutputFormat":             {"outputFormat", "string", inputOutputFormatPrompt, "", "Prompt for output format", nil /*no validation*/, outputFormats, "AskSelect"},
@@ -93,7 +93,6 @@ func setField(v interface{}, name string, value string, fvType string) error {
 	if rv.Kind() != reflect.Ptr || rv.Elem().Kind() != reflect.Struct {
 		return errors.New("v must be pointer to struct")
 	}
-
 	rv = rv.Elem()
 	fv := rv.FieldByName(name)
 	if !fv.IsValid() {
@@ -103,7 +102,7 @@ func setField(v interface{}, name string, value string, fvType string) error {
 	if !fv.CanSet() {
 		return fmt.Errorf("cannot set field %s", name)
 	}
-
+	
 	if fvType == "string" {
 		if fv.Kind() != reflect.String {
 			return fmt.Errorf("%s is not a string field", name)
@@ -129,6 +128,8 @@ func setField(v interface{}, name string, value string, fvType string) error {
 		}
 
 		fv.SetBool(boolVal)
+	} else {
+		return fmt.Errorf("%s is not either string, int or bool", fvType)
 	}
 
 	return nil
@@ -148,7 +149,8 @@ func (o *askOpts) AskGet(name string, qType string, promptMessage string, prompt
 }
 
 func (o *askOpts) AskSelect(name string, qType string, promptMessage string, promptHelpMessage string, promptErrorMessage string, opts []string) error {
-	val, err := o.prompt.SelectOne(inputOutputFormatPrompt, promptHelpMessage, opts)
+	val, err := o.prompt.SelectOne(promptMessage, promptHelpMessage, opts)
+
 	if err != nil {
 		return fmt.Errorf("%s: %w", promptErrorMessage, err)
 	}
@@ -161,7 +163,7 @@ func (o *askOpts) AskSelect(name string, qType string, promptMessage string, pro
 }
 
 func (o *askOpts) AskGetSecret(name string, qType string, promptMessage string, promptHelpMessage string, promptErrorMessage string) error {
-	val, err := o.prompt.GetSecret(inputOutputFormatPrompt, promptHelpMessage)
+	val, err := o.prompt.GetSecret(promptMessage, promptHelpMessage)
 	if err != nil {
 		return fmt.Errorf("%s: %w", promptErrorMessage, err)
 	}
@@ -181,13 +183,71 @@ func (o *askOpts) Ask(key string) error {
 	}
 
 	if q.funcName == "AskGet" {
-		o.AskGet(q.name, q.qType, q.promptMessage, q.promptHelpMessage, q.promptErrorMessage, q.validation)
+		if err := o.AskGet(q.name, q.qType, q.promptMessage, q.promptHelpMessage, q.promptErrorMessage, q.validation); err != nil {
+			return err
+		}
 	} else if q.funcName == "AskSelect" {
-		o.AskSelect(q.name, q.qType, q.promptMessage, q.promptHelpMessage, q.promptErrorMessage, q.opts)
+		if err := o.AskSelect(q.name, q.qType, q.promptMessage, q.promptHelpMessage, q.promptErrorMessage, q.opts); err != nil {
+			return err
+		}
 	} else if q.funcName == "AskGetSecret" {
-		o.AskGetSecret(q.name, q.qType, q.promptMessage, q.promptHelpMessage, q.promptErrorMessage)
+		if err := o.AskGetSecret(q.name, q.qType, q.promptMessage, q.promptHelpMessage, q.promptErrorMessage); err != nil {
+			return err
+		}
 	} else {
 		return fmt.Errorf("Unexpected q.funcName. Available options: AskGet, AskSelect, AskGetSecret")
+	}
+
+	return nil
+}
+
+// func (o *askOpts) AskWithIterator(iteratorKey string, keys []string) error {
+// 	if err := o.Ask(iteratorKey); err != nil {
+// 		return err
+// 	}
+
+// 	for i := 0; i < o.Iterator; i++ {
+// 		var result []string
+// 		for _, key := range keys {
+// 			if err := o.Ask(key); err != nil {
+// 				return err
+// 			}
+
+// 			q, _ := questions[key]
+// 			qType := q.qType
+// 			if qType == "string" {
+// 				result = append(result, o.intPlaceholder)
+// 			} else if qType == "int" {
+// 				result = append(result, o.stringPlaceholder)
+// 			} else if qType == "bool" {
+// 				result = append(result, o.boolPlaceholder)
+// 			} else {
+// 				return fmt.Errorf("%s is not either string, int or bool", qType)
+// 			}
+// 		}
+
+// 		o.fromFile = append(o.fromFile, fromFile)
+// 	}
+
+// 	return nil
+// }
+
+func (o *askOpts) IterateK8sStruct(v interface{}) error {
+	// TODO: handle struct inside struct case
+	rv := reflect.ValueOf(v)
+	if rv.Kind() != reflect.Ptr || rv.Elem().Kind() != reflect.Struct {
+		return errors.New("v must be pointer to struct")
+	}
+
+	rv = rv.Elem()
+	for i := 0; i < rv.NumField(); i++ {
+		fieldName := rv.Type().Field(i).Name
+		fmt.Println(fieldName)
+		fmt.Println(rv.Kind())
+		fmt.Println(rv.Field(i))
+		// if err := o.Ask(fieldName); err != nil {
+		// 	return err
+		// }
 	}
 
 	return nil

@@ -14,12 +14,19 @@ func int32Ptr(i int32) *int32 { return &i }
 func (o *askOpts) ExecuteCreateDeploymentSpec() error {
 	var objectMeta metav1.ObjectMeta
 	var spec appsv1.DeploymentSpec
+	var podSpec apiv1.PodSpec
 
 	if err := o.Ask("RequireObjectMeta"); err != nil {
 		return err
 	}
 
-	if o.requireObjectMeta {
+	fmt.Println(o.RequireObjectMeta)
+
+	if o.RequireObjectMeta {
+		if err := o.IterateK8sStruct(&metav1.ObjectMeta{}); err != nil {
+			return err
+		}
+
 		// Name
 		if err := o.Ask("ObjectMetaName"); err != nil {
 			return err
@@ -41,7 +48,7 @@ func (o *askOpts) ExecuteCreateDeploymentSpec() error {
 		return err
 	}
 
-	if o.requireDeploymentSpec {
+	if o.RequireDeploymentSpec {
 		// Replicas
 		if err := o.Ask("Replicas"); err != nil {
 			return err
@@ -66,8 +73,13 @@ func (o *askOpts) ExecuteCreateDeploymentSpec() error {
 			return err
 		}
 
+		// Deployment > DeploymentSpec > PodTemplateSpec > PodSpec > Container
+		// if err := o.AskWithIterator("ContainerIterator", "Container"); err != nil {
+		// 	return err
+		// }
+
 		// Deployment > DeploymentSpec > PodTemplateSpec > PodSpec
-		podSpec := apiv1.PodSpec{
+		podSpec = apiv1.PodSpec{
 			Containers: []apiv1.Container{
 				{
 					Name:  "web",
@@ -118,7 +130,7 @@ func (o *askOpts) ExecuteCreateDeploymentSpec() error {
 		return err
 	}
 
-	if o.requireDeploymentStatus {
+	if o.RequireDeploymentStatus {
 		// ObservedGeneration
 		// Replicas
 		// UpdatedReplicas

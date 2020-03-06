@@ -16,7 +16,11 @@ type GlobalOpts struct {
 
 type askVars struct {
 	*GlobalOpts
-	KindName string
+	KindName          string
+	Iterator          int
+	intPlaceholder    int
+	stringPlaceholder string
+	boolPlaceholder   bool
 	// Cmd Opts
 	DeploymentCmdOpts
 	SecretCmdOpts
@@ -76,9 +80,9 @@ type SecretCmdOpts struct {
 
 type DeploymentOpts struct {
 	// Deployment
-	requireObjectMeta       bool
-	requireDeploymentSpec   bool
-	requireDeploymentStatus bool
+	RequireObjectMeta       bool
+	RequireDeploymentSpec   bool
+	RequireDeploymentStatus bool
 	// DeploymentSpec
 	DeploymentSpecOpts
 	// DeploymentStatus
@@ -86,21 +90,21 @@ type DeploymentOpts struct {
 }
 
 type DeploymentSpecOpts struct {
-	requireMoreThanOneReplica   bool
-	requireDeploymentStrategy   bool
-	requireMinReadySeconds      bool
-	requireRevisionHistoryLimit bool
-	requirePaused               bool
+	RequireMoreThanOneReplica   bool
+	RequireDeploymentStrategy   bool
+	RequireMinReadySeconds      bool
+	RequireRevisionHistoryLimit bool
+	RequirePaused               bool
 }
 
 type DeploymentStatusOpts struct {
-	requireObservedGeneration  bool
-	requireReplicas            bool
-	requireUpdatedReplicas     bool
-	requireReadyReplicas       bool
-	requireAvailableReplicas   bool
-	requireUnavailableReplicas bool
-	requireCollisionCount      bool
+	RequireObservedGeneration  bool
+	RequireReplicas            bool
+	RequireUpdatedReplicas     bool
+	RequireReadyReplicas       bool
+	RequireAvailableReplicas   bool
+	RequireUnavailableReplicas bool
+	RequireCollisionCount      bool
 }
 
 type k8s struct {
