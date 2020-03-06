@@ -24,20 +24,10 @@ const (
 	inputFromEnvFilePrompt              = "Where is the env file path?"
 	inputNoOfFromFileIterationPrompt    = "How many from-file iterations for your input?"
 	inputNoOfFromLiteralIterationPrompt = "How many from-literal iterations for your input?"
-	inputNamespacePrompt                = "Please input the namespace you want to create in:"
-	inputObjectMetaNamePrompt           = "What ObjectMeta you want to name?"
-	inputReplicasPrompt                 = "How many replicas you want to create?"
-	inputMinReadySecondsPrompt          = "How many seconds for which a newly created pod should be ready"
-	inputRevisionHistoryLimitPrompt     = "How many old ReplicaSets to retain to allow rollback?"
-	inputPausedPrompt                   = "Is the deployment paused?"
-	inputProgressDeadlineSecondsPrompt  = "How many seconds for a deployment to make progress before it is considered to be failed?"
 
 	// select
-	inputOutputFormatPrompt            = "Please select an output format:"
-	inputSecretCmdNamePrompt           = "Please select the type of secret:"
-	inputRequireObjectMetaPrompt       = "Do you want to input Object Meta?"
-	inputRequireDeploymentSpecPrompt   = "Do you want to input Deployment Spec?"
-	inputRequireDeploymentStatusPrompt = "Do you want to input Deployment Status?"
+	inputOutputFormatPrompt  = "Please select an output format:"
+	inputSecretCmdNamePrompt = "Please select the type of secret:"
 )
 
 type Question struct {
@@ -64,20 +54,10 @@ var questions = map[string]Question{
 	"CertPath":                 {"CertPath", "string", inputDockerUserNamePrompt, "", "Prompt for cert path", nil /*no validation*/, nil, "AskGet"},
 	"KeyPath":                  {"KeyPath", "string", inputDockerUserNamePrompt, "", "Prompt for key path", nil /*no validation*/, nil, "AskGet"},
 	"FromEnvFile":              {"FromEnvFile", "string", inputFromEnvFilePrompt, "", "Prompt for env", nil /*no validation*/, nil, "AskGet"},
-	"Namespace":                {"Namespace", "string", inputNamespacePrompt, "", "Prompt for namespace", nil /*no validation*/, nil, "AskGet"},
-	"RequireObjectMeta":        {"RequireObjectMeta", "bool", inputRequireObjectMetaPrompt, "", "Prompt for requireObjectMeta", nil /*no validation*/, yesOrNo, "AskSelect"},
-	"RequireDeploymentSpec":    {"RequireDeploymentSpec", "bool", inputRequireDeploymentSpecPrompt, "", "Prompt for requireDeploymentSpec", nil /*no validation*/, yesOrNo, "AskSelect"},
-	"RequireDeploymentStatus":  {"RequireDeploymentStatus", "bool", inputRequireDeploymentStatusPrompt, "", "Prompt for requireDeploymentStatus", nil /*no validation*/, yesOrNo, "AskSelect"},
 	"OutputFormat":             {"OutputFormat", "string", inputOutputFormatPrompt, "", "Prompt for output format", nil /*no validation*/, outputFormats, "AskSelect"},
 	"SecretCmdName":            {"SecretCmdName", "string", inputSecretCmdNamePrompt, "", "Prompt for secret cmd name", nil /*no validation*/, secretNames, "AskSelect"},
 	"NoOfFromFileIteration":    {"NoOfFromFileIteration", "int", inputNoOfFromFileIterationPrompt, "", "Prompt for from-file iteration", nil /*no validation*/, nil, "AskGet"},
 	"NoOfFromLiteralIteration": {"NoOfFromLiteralIteration", "int", inputNoOfFromLiteralIterationPrompt, "", "Prompt for from-literal iteration", nil /*no validation*/, nil, "AskGet"},
-	"ObjectMetaName":           {"Name", "string", inputObjectMetaNamePrompt, "", "Prompt for object meta name", nil /*no validation*/, nil, "AskGet"},
-	"Replicas":                 {"Replicas", "int", inputReplicasPrompt, "", "Prompt for replicas", nil /*no validation*/, nil, "AskGet"},
-	"MinReadySeconds":          {"MinReadySeconds", "int", inputMinReadySecondsPrompt, "", "Prompt for MinReadySeconds", nil /*no validation*/, nil, "AskGet"},
-	"RevisionHistoryLimit":     {"RevisionHistoryLimit", "int", inputRevisionHistoryLimitPrompt, "", "Prompt for RevisionHistoryLimit", nil /*no validation*/, nil, "AskGet"},
-	"Paused":                   {"Paused", "bool", inputPausedPrompt, "", "Prompt for Paused", nil /*no validation*/, nil, "AskGet"},
-	"ProgressDeadlineSeconds":  {"ProgressDeadlineSeconds", "int", inputProgressDeadlineSecondsPrompt, "", "Prompt for ProgressDeadlineSeconds", nil /*no validation*/, nil, "AskGet"},
 }
 
 var yesOrNo = []string{"Yes", "No"}
@@ -102,7 +82,7 @@ func setField(v interface{}, name string, value string, fvType string) error {
 	if !fv.CanSet() {
 		return fmt.Errorf("cannot set field %s", name)
 	}
-	
+
 	if fvType == "string" {
 		if fv.Kind() != reflect.String {
 			return fmt.Errorf("%s is not a string field", name)
@@ -196,58 +176,6 @@ func (o *askOpts) Ask(key string) error {
 		}
 	} else {
 		return fmt.Errorf("Unexpected q.funcName. Available options: AskGet, AskSelect, AskGetSecret")
-	}
-
-	return nil
-}
-
-// func (o *askOpts) AskWithIterator(iteratorKey string, keys []string) error {
-// 	if err := o.Ask(iteratorKey); err != nil {
-// 		return err
-// 	}
-
-// 	for i := 0; i < o.Iterator; i++ {
-// 		var result []string
-// 		for _, key := range keys {
-// 			if err := o.Ask(key); err != nil {
-// 				return err
-// 			}
-
-// 			q, _ := questions[key]
-// 			qType := q.qType
-// 			if qType == "string" {
-// 				result = append(result, o.intPlaceholder)
-// 			} else if qType == "int" {
-// 				result = append(result, o.stringPlaceholder)
-// 			} else if qType == "bool" {
-// 				result = append(result, o.boolPlaceholder)
-// 			} else {
-// 				return fmt.Errorf("%s is not either string, int or bool", qType)
-// 			}
-// 		}
-
-// 		o.fromFile = append(o.fromFile, fromFile)
-// 	}
-
-// 	return nil
-// }
-
-func (o *askOpts) IterateK8sStruct(v interface{}) error {
-	// TODO: handle struct inside struct case
-	rv := reflect.ValueOf(v)
-	if rv.Kind() != reflect.Ptr || rv.Elem().Kind() != reflect.Struct {
-		return errors.New("v must be pointer to struct")
-	}
-
-	rv = rv.Elem()
-	for i := 0; i < rv.NumField(); i++ {
-		fieldName := rv.Type().Field(i).Name
-		fmt.Println(fieldName)
-		fmt.Println(rv.Kind())
-		fmt.Println(rv.Field(i))
-		// if err := o.Ask(fieldName); err != nil {
-		// 	return err
-		// }
 	}
 
 	return nil

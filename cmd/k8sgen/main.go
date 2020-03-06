@@ -23,7 +23,6 @@ func buildRootCmd() *cobra.Command {
 		SilenceUsage:     true,
 	}
 
-	cmd.AddCommand(cli.BuildCreateCmd())
 	cmd.AddCommand(cli.BuildJumpStartCmd())
 
 	return cmd

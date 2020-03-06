@@ -1,10 +1,5 @@
 package cli
 
-import (
-	appsv1 "k8s.io/api/apps/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-)
-
 type GlobalOpts struct {
 	// Global Prompter
 	prompt prompter
@@ -24,10 +19,6 @@ type askVars struct {
 	// Cmd Opts
 	DeploymentCmdOpts
 	SecretCmdOpts
-	// Create Opts
-	DeploymentOpts
-	//External
-	k8s
 }
 
 type askOpts struct {
@@ -76,41 +67,4 @@ type SecretCmdOpts struct {
 	NoOfFromFileIteration int
 	// Number of iteration for the same question for fromLiteral
 	NoOfFromLiteralIteration int
-}
-
-type DeploymentOpts struct {
-	// Deployment
-	RequireObjectMeta       bool
-	RequireDeploymentSpec   bool
-	RequireDeploymentStatus bool
-	// DeploymentSpec
-	DeploymentSpecOpts
-	// DeploymentStatus
-	DeploymentStatusOpts
-}
-
-type DeploymentSpecOpts struct {
-	RequireMoreThanOneReplica   bool
-	RequireDeploymentStrategy   bool
-	RequireMinReadySeconds      bool
-	RequireRevisionHistoryLimit bool
-	RequirePaused               bool
-}
-
-type DeploymentStatusOpts struct {
-	RequireObservedGeneration  bool
-	RequireReplicas            bool
-	RequireUpdatedReplicas     bool
-	RequireReadyReplicas       bool
-	RequireAvailableReplicas   bool
-	RequireUnavailableReplicas bool
-	RequireCollisionCount      bool
-}
-
-type k8s struct {
-	ObjectMeta       metav1.ObjectMeta
-	TypeMeta         metav1.TypeMeta
-	Deployment       appsv1.Deployment
-	DeploymentSpec   appsv1.DeploymentSpec
-	DeploymentStatus appsv1.DeploymentStatus
 }
