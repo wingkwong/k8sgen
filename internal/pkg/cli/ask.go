@@ -10,20 +10,20 @@ import (
 
 const (
 	// text input
-	inputKindNamePrompt                 = "What kind of object you want to create?"
-	inputDeploymentNamePrompt           = "What deployment you want to name?"
-	inputImageNamePrompt                = "What image you want to name to run?"
-	inputOutputPathPrompt               = "What directory you want to save?"
-	inputSecretNamePrompt               = "What secret you want to name?"
-	inputDockerServerNamePrompt         = "What docker server you want to name?"
-	inputDockerUserNamePrompt           = "What is the username for Docker registry authentiation?"
-	inputDockerUserPasswordPrompt       = "What is the password for Docker registry authentiation?"
-	inputDockerEmailPrompt              = "What is the email address for Docker registry?"
-	inputFromFilePrompt                 = "Input key names from file: (e.g path/to/bar):"
-	inputFromLiteralPrompt              = "Input a key-value pair secret (e.g foo='bar'):"
-	inputFromEnvFilePrompt              = "Where is the env file path?"
-	inputNoOfFromFileIterationPrompt    = "How many from-file iterations for your input?"
-	inputNoOfFromLiteralIterationPrompt = "How many from-literal iterations for your input?"
+	inputKindNamePrompt             = "What kind of object you want to create?"
+	inputDeploymentNamePrompt       = "What deployment you want to name?"
+	inputImageNamePrompt            = "What image you want to name to run?"
+	inputOutputPathPrompt           = "What directory you want to save?"
+	inputSecretNamePrompt           = "What secret you want to name?"
+	inputDockerServerNamePrompt     = "What docker server you want to name?"
+	inputDockerUserNamePrompt       = "What is the username for Docker registry authentiation?"
+	inputDockerUserPasswordPrompt   = "What is the password for Docker registry authentiation?"
+	inputDockerEmailPrompt          = "What is the email address for Docker registry?"
+	inputFromFilePrompt             = "Input key names from file: (e.g path/to/bar):"
+	inputFromLiteralPrompt          = "Input a key-value pair secret (e.g foo='bar'):"
+	inputFromEnvFilePrompt          = "Where is the env file path?"
+	inputFromFileIterationPrompt    = "How many from-file iterations for your input?"
+	inputFromLiteralIterationPrompt = "How many from-literal iterations for your input?"
 
 	// select
 	inputOutputFormatPrompt  = "Please select an output format:"
@@ -42,22 +42,25 @@ type Question struct {
 }
 
 var questions = map[string]Question{
-	"Kind":                     {"KindName", "string", inputKindNamePrompt, "", "Select kind name", nil /*no validation*/, kindNames, "AskSelect"},
-	"DeploymentName":           {"DeploymentName", "string", inputDeploymentNamePrompt, "", "Prompt for deployment name", validateDeploymentName, nil, "AskGet"},
-	"Image":                    {"ImageName", "string", inputImageNamePrompt, "", "Prompt for image name", nil /*no validation*/, nil, "AskGet"},
-	"OutputPath":               {"OutputPath", "string", inputOutputPathPrompt, "", "Prompt for output path", nil /*no validation*/, nil, "AskGet"},
-	"SecretName":               {"SecretName", "string", inputSecretNamePrompt, "", "Prompt for secret name", nil /*no validation*/, nil, "AskGet"},
-	"DockerServerName":         {"DockerServer", "string", inputDockerServerNamePrompt, "", "Prompt for docker server name", nil /*no validation*/, nil, "AskGet"},
-	"DockerUserName":           {"DockerUserName", "string", inputDockerUserNamePrompt, "", "Prompt for docker user name", nil /*no validation*/, nil, "AskGet"},
-	"DockerPassword":           {"DockerUserPassword", "string", inputDockerUserPasswordPrompt, "", "Prompt for docker password", nil /*no validation*/, nil, "AskGetSecret"},
-	"DockerEmail":              {"DockerEmail", "string", inputDockerEmailPrompt, "", "Prompt for docker email", nil /*no validation*/, nil, "AskGet"}, // TODO: email validation
-	"CertPath":                 {"CertPath", "string", inputDockerUserNamePrompt, "", "Prompt for cert path", nil /*no validation*/, nil, "AskGet"},
-	"KeyPath":                  {"KeyPath", "string", inputDockerUserNamePrompt, "", "Prompt for key path", nil /*no validation*/, nil, "AskGet"},
-	"FromEnvFile":              {"FromEnvFile", "string", inputFromEnvFilePrompt, "", "Prompt for env", nil /*no validation*/, nil, "AskGet"},
-	"OutputFormat":             {"OutputFormat", "string", inputOutputFormatPrompt, "", "Prompt for output format", nil /*no validation*/, outputFormats, "AskSelect"},
-	"SecretCmdName":            {"SecretCmdName", "string", inputSecretCmdNamePrompt, "", "Prompt for secret cmd name", nil /*no validation*/, secretNames, "AskSelect"},
-	"NoOfFromFileIteration":    {"NoOfFromFileIteration", "int", inputNoOfFromFileIterationPrompt, "", "Prompt for from-file iteration", nil /*no validation*/, nil, "AskGet"},
-	"NoOfFromLiteralIteration": {"NoOfFromLiteralIteration", "int", inputNoOfFromLiteralIterationPrompt, "", "Prompt for from-literal iteration", nil /*no validation*/, nil, "AskGet"},
+	"Kind":             {"KindName", "string", inputKindNamePrompt, "", "Select kind name", nil /*no validation*/, kindNames, "AskSelect"},
+	"DeploymentName":   {"DeploymentName", "string", inputDeploymentNamePrompt, "", "Prompt for deployment name", validateDeploymentName, nil, "AskGet"},
+	"Image":            {"ImageName", "string", inputImageNamePrompt, "", "Prompt for image name", nil /*no validation*/, nil, "AskGet"},
+	"OutputPath":       {"OutputPath", "string", inputOutputPathPrompt, "", "Prompt for output path", nil /*no validation*/, nil, "AskGet"},
+	"SecretName":       {"SecretName", "string", inputSecretNamePrompt, "", "Prompt for secret name", nil /*no validation*/, nil, "AskGet"},
+	"DockerServerName": {"DockerServer", "string", inputDockerServerNamePrompt, "", "Prompt for docker server name", nil /*no validation*/, nil, "AskGet"},
+	"DockerUserName":   {"DockerUserName", "string", inputDockerUserNamePrompt, "", "Prompt for docker user name", nil /*no validation*/, nil, "AskGet"},
+	"DockerPassword":   {"DockerUserPassword", "string", inputDockerUserPasswordPrompt, "", "Prompt for docker password", nil /*no validation*/, nil, "AskGetSecret"},
+	"DockerEmail":      {"DockerEmail", "string", inputDockerEmailPrompt, "", "Prompt for docker email", nil /*no validation*/, nil, "AskGet"}, // TODO: email validation
+	"CertPath":         {"CertPath", "string", inputDockerUserNamePrompt, "", "Prompt for cert path", nil /*no validation*/, nil, "AskGet"},
+	"KeyPath":          {"KeyPath", "string", inputDockerUserNamePrompt, "", "Prompt for key path", nil /*no validation*/, nil, "AskGet"},
+	"FromEnvFile":      {"FromEnvFile", "string", inputFromEnvFilePrompt, "", "Prompt for env", nil /*no validation*/, nil, "AskGet"},
+	"OutputFormat":     {"OutputFormat", "string", inputOutputFormatPrompt, "", "Prompt for output format", nil /*no validation*/, outputFormats, "AskSelect"},
+	"SecretCmdName":    {"SecretCmdName", "string", inputSecretCmdNamePrompt, "", "Prompt for secret cmd name", nil /*no validation*/, secretNames, "AskSelect"},
+	// Iteration
+	"FromFileIteration":    {"Iterator", "int", inputFromFileIterationPrompt, "", "Prompt for from-file iteration", nil /*no validation*/, nil, "AskGet"},
+	"FromLiteralIteration": {"Iterator", "int", inputFromLiteralIterationPrompt, "", "Prompt for from-literal iteration", nil /*no validation*/, nil, "AskGet"},
+	//Array
+	"FromFile": {"FromFile", "array", inputFromFilePrompt, "", "Prompt for from-file", nil /*no validation*/, nil, "AskGet"},
 }
 
 var yesOrNo = []string{"Yes", "No"}
@@ -108,11 +111,20 @@ func setField(v interface{}, name string, value string, fvType string) error {
 		}
 
 		fv.SetBool(boolVal)
+	} else if fvType == "array" {
+		//TODO: check type
+		fv.Set(reflect.Append(fv, reflect.ValueOf(value)))
 	} else {
 		return fmt.Errorf("%s is not either string, int or bool", fvType)
 	}
 
 	return nil
+}
+
+func (o *askOpts) getValueByFieldName(v interface{}, name string) (string, error) {
+	rv := reflect.ValueOf(v)
+	fv := reflect.Indirect(rv).FieldByName(name)
+	return fv.String(), nil
 }
 
 func (o *askOpts) AskGet(name string, qType string, promptMessage string, promptHelpMessage string, promptErrorMessage string, validation prompt.ValidatorFunc) error {
@@ -155,6 +167,27 @@ func (o *askOpts) AskGetSecret(name string, qType string, promptMessage string, 
 	return nil
 }
 
+func (o *askOpts) AskWithIterator(key string) error {
+	_, exists := questions[key]
+
+	if !exists {
+		return fmt.Errorf("key %s not exists in questions", key)
+	}
+
+	iteratorKey := key + "Iteration"
+	if err := o.Ask(iteratorKey); err != nil {
+		return err
+	}
+
+	for i := 0; i < o.Iterator; i++ {
+		if err := o.Ask(key); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (o *askOpts) Ask(key string) error {
 	q, exists := questions[key]
 
@@ -176,38 +209,6 @@ func (o *askOpts) Ask(key string) error {
 		}
 	} else {
 		return fmt.Errorf("Unexpected q.funcName. Available options: AskGet, AskSelect, AskGetSecret")
-	}
-
-	return nil
-}
-
-func (o *askOpts) AskFromFilePath() error {
-	if err := o.Ask("NoOfFromFileIteration"); err != nil {
-		return err
-	}
-
-	for i := 0; i < o.NoOfFromFileIteration; i++ {
-		fromFile, err := o.prompt.Get(inputFromFilePrompt, "", nil /*no validation*/)
-		if err != nil {
-			return fmt.Errorf("Prompt for from-file: %w", err)
-		}
-		o.FromFile = append(o.FromFile, fromFile)
-	}
-
-	return nil
-}
-
-func (o *askOpts) AskFromLiteral() error {
-	if err := o.Ask("NoOfFromLiteralIteration"); err != nil {
-		return err
-	}
-
-	for i := 0; i < o.NoOfFromLiteralIteration; i++ {
-		fromLiteral, err := o.prompt.Get(inputFromLiteralPrompt, "", nil /*no validation*/)
-		if err != nil {
-			return fmt.Errorf("Prompt for from-literal: %w", err)
-		}
-		o.FromLiteral = append(o.FromLiteral, fromLiteral)
 	}
 
 	return nil
