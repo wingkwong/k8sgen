@@ -64,7 +64,7 @@ type SecretCmdOpts struct {
 	// Secret from environment file
 	FromEnvFile string
 	// Number of iteration for the same question for fromFile
-	NoOfFromFileIteration int
+	FromFileIteration int
 	// Number of iteration for the same question for fromLiteral
-	NoOfFromLiteralIteration int
+	FromLiteralIteration int
 }
