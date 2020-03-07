@@ -59,11 +59,11 @@ func (o *askOpts) ExecuteRoleCmd() error {
 		cmd = cmd + fmt.Sprintf("--verb=%s ", o.Verb)
 	}
 
+	cmd = cmd + fmt.Sprintf("--output=%s > %s", o.OutputFormat, o.OutputPath)
+
 	if err := ExecCmd(cmd); err != nil {
 		return fmt.Errorf("Failed To execute command `%s` \n %w", cmd, err)
 	}
-
-	cmd = cmd + fmt.Sprintf("--output=%s > %s", o.OutputFormat, o.OutputPath)
 
 	return nil
 }
