@@ -31,11 +31,11 @@ func (o *askOpts) AskSecretCmdOpts() error {
 			return err
 		}
 
-		if err := o.AskFromFilePath(); err != nil {
+		if err := o.AskWithIterator("FromFile"); err != nil {
 			return err
 		}
 
-		if err := o.AskFromLiteral(); err != nil {
+		if err := o.AskWithIterator("FromLiteral"); err != nil {
 			return err
 		}
 
@@ -79,11 +79,11 @@ func (o *askOpts) ExecuteSecretCmd() error {
 	case genericCmdName:
 		cmd = fmt.Sprintf("kubectl create secret generic %s ", o.SecretName)
 
-		for i := 0; i < o.NoOfFromFileIteration; i++ {
+		for i := 0; i < len(o.FromFile); i++ {
 			cmd = cmd + fmt.Sprintf("--from-file=%s ", o.FromFile[i])
 		}
 
-		for i := 0; i < o.NoOfFromLiteralIteration; i++ {
+		for i := 0; i < len(o.FromLiteral); i++ {
 			cmd = cmd + fmt.Sprintf("--from-literal=%s ", o.FromLiteral[i])
 		}
 
