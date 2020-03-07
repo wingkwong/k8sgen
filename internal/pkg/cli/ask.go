@@ -3,9 +3,10 @@ package cli
 import (
 	"errors"
 	"fmt"
-	"github.com/wingkwong/k8sgen/third_party/term/prompt"
 	"reflect"
 	"strconv"
+
+	"github.com/wingkwong/k8sgen/third_party/term/prompt"
 )
 
 const (
@@ -24,7 +25,10 @@ const (
 	inputFromEnvFilePrompt          = "Where is the env file path?"
 	inputFromFileIterationPrompt    = "How many from-file iterations for your input?"
 	inputFromLiteralIterationPrompt = "How many from-literal iterations for your input?"
-
+	inputRoleNamePrompt             = "What role you want to name?"
+	inputResourcePrompt             = "What resource you want to name?"
+	inputResourceNamePrompt         = "What resource name you want to name?"
+	inputVerbPrompt                 = "What verb you want to name?"
 	// select
 	inputOutputFormatPrompt  = "Please select an output format:"
 	inputSecretCmdNamePrompt = "Please select the type of secret:"
@@ -56,6 +60,10 @@ var questions = map[string]Question{
 	"FromEnvFile":      {"FromEnvFile", "string", inputFromEnvFilePrompt, "", "Prompt for env", nil /*no validation*/, nil, "AskGet"},
 	"OutputFormat":     {"OutputFormat", "string", inputOutputFormatPrompt, "", "Prompt for output format", nil /*no validation*/, outputFormats, "AskSelect"},
 	"SecretCmdName":    {"SecretCmdName", "string", inputSecretCmdNamePrompt, "", "Prompt for secret cmd name", nil /*no validation*/, secretNames, "AskSelect"},
+	"RoleName":         {"RoleName", "string", inputRoleNamePrompt, "", "Prompt for role name", nil /*no validation*/, nil, "AskGet"},
+	"Resource":         {"Resource", "string", inputResourcePrompt, "", "Prompt for resource", nil /*no validation*/, nil, "AskGet"},
+	"ResourceName":     {"ResourceName", "string", inputResourceNamePrompt, "", "Prompt for resource name", nil /*no validation*/, nil, "AskGet"},
+	"Verb":             {"Verb", "string", inputVerbPrompt, "", "Prompt for verb", nil /*no validation*/, nil, "AskGet"},
 	// Iteration
 	"FromFileIteration":    {"Iterator", "int", inputFromFileIterationPrompt, "", "Prompt for from-file iteration", nil /*no validation*/, nil, "AskGet"},
 	"FromLiteralIteration": {"Iterator", "int", inputFromLiteralIterationPrompt, "", "Prompt for from-literal iteration", nil /*no validation*/, nil, "AskGet"},

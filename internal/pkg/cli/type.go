@@ -19,6 +19,7 @@ type askVars struct {
 	// Cmd Opts
 	DeploymentCmdOpts
 	SecretCmdOpts
+	RoleCmdOpts
 }
 
 type askOpts struct {
@@ -67,4 +68,15 @@ type SecretCmdOpts struct {
 	FromFileIteration int
 	// Number of iteration for the same question for fromLiteral
 	FromLiteralIteration int
+}
+
+type RoleCmdOpts struct {
+	// Nmae Of Role
+	RoleName string
+	// Resource that the rule applies to
+	Resource string
+	// Resource in the white list that the rule applies to, repeat this flag for multiple items
+	ResourceName string
+	// Verb that applies to the resources contained in the rule
+	Verb string
 }
