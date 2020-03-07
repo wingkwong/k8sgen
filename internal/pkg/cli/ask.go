@@ -29,10 +29,15 @@ const (
 	inputResourcePrompt             = "What resource you want to name?"
 	inputResourceNamePrompt         = "What resource name you want to name?"
 	inputVerbPrompt                 = "What verb you want to name?"
+	inputQuotaPrompt                = "What quota you want to name?"
+	inputHardPrompt                 = "What hard you want to name?"
+	inputScopesPrompt               = "What scopes you want to name?"
 
-	inputQuotaPrompt  = "What quota you want to name?"
-	inputHardPrompt   = "What hard you want to name?"
-	inputScopesPrompt = "What scopes you want to name?"
+	inputPriorityClassPrompt    = "What priority class you want to name?"
+	inputValuePrompt            = "What value you want to have?"
+	inputDescriptionPrompt      = "What description you want to have?"
+	inputGlobalDefaultPrompt    = "Do you want this PriorityClass to be considered as the default priority?"
+	inputPreemptionPolicyPrompt = "What preemption-policy you want to have?"
 
 	// select
 	inputOutputFormatPrompt  = "Please select an output format:"
@@ -72,6 +77,13 @@ var questions = map[string]Question{
 	"QuotaName":        {"QuotaName", "string", inputQuotaPrompt, "", "Prompt for quota name", nil /*no validation*/, nil, "AskGet"},
 	"Hard":             {"Hard", "string", inputHardPrompt, "", "Prompt for hard", nil /*no validation*/, nil, "AskGet"},
 	"Scopes":           {"Scopes", "string", inputScopesPrompt, "", "Prompt for scopes", nil /*no validation*/, nil, "AskGet"},
+
+	"PriorityClassName": {"PriorityClassName", "string", inputPriorityClassPrompt, "", "Prompt for priority class", nil /*no validation*/, nil, "AskGet"},
+	"Value":             {"Value", "int", inputValuePrompt, "", "Prompt for value", nil /*no validation*/, nil, "AskGet"},
+	"Description":       {"Description", "string", inputDescriptionPrompt, "", "Prompt for description", nil /*no validation*/, nil, "AskGet"},
+	"GlobalDefault":     {"GlobalDefault", "bool", inputGlobalDefaultPrompt, "", "Prompt for global default", nil /*no validation*/, yesOrNo, "AskSelect"},
+	"PreemptionPolicy":  {"PreemptionPolicy", "string", inputPreemptionPolicyPrompt, "", "Prompt for preemption policy", nil /*no validation*/, nil, "AskGet"},
+
 	// Iteration
 	"FromFileIteration":    {"Iterator", "int", inputFromFileIterationPrompt, "", "Prompt for from-file iteration", nil /*no validation*/, nil, "AskGet"},
 	"FromLiteralIteration": {"Iterator", "int", inputFromLiteralIterationPrompt, "", "Prompt for from-literal iteration", nil /*no validation*/, nil, "AskGet"},

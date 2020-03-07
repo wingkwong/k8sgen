@@ -21,6 +21,7 @@ type askVars struct {
 	SecretCmdOpts
 	RoleCmdOpts
 	QuotaCmdOpts
+	PriorityClassCmtOpts
 }
 
 type askOpts struct {
@@ -89,4 +90,16 @@ type QuotaCmdOpts struct {
 	Hard string
 	// A comma-delimited set of quota scopes that must all match each object tracked by the quota.
 	Scopes string
+}
+
+type PriorityClassCmtOpts struct {
+	PriorityClassName string
+	// The value of this priority class.
+	Value int
+	// Description is an arbitrary string that usually provides guidelines on when this priority class should be used
+	Description string
+	// Global-default specifies whether this PriorityClass should be considered as the default priority.
+	GlobalDefault bool
+	// Preemption-policy is the policy for preempting pods with lower priority
+	PreemptionPolicy string
 }
