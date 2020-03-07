@@ -29,6 +29,11 @@ const (
 	inputResourcePrompt             = "What resource you want to name?"
 	inputResourceNamePrompt         = "What resource name you want to name?"
 	inputVerbPrompt                 = "What verb you want to name?"
+
+	inputQuotaPrompt  = "What quota you want to name?"
+	inputHardPrompt   = "What hard you want to name?"
+	inputScopesPrompt = "What scopes you want to name?"
+
 	// select
 	inputOutputFormatPrompt  = "Please select an output format:"
 	inputSecretCmdNamePrompt = "Please select the type of secret:"
@@ -64,6 +69,9 @@ var questions = map[string]Question{
 	"Resource":         {"Resource", "string", inputResourcePrompt, "", "Prompt for resource", nil /*no validation*/, nil, "AskGet"},
 	"ResourceName":     {"ResourceName", "string", inputResourceNamePrompt, "", "Prompt for resource name", nil /*no validation*/, nil, "AskGet"},
 	"Verb":             {"Verb", "string", inputVerbPrompt, "", "Prompt for verb", nil /*no validation*/, nil, "AskGet"},
+	"QuotaName":        {"QuotaName", "string", inputQuotaPrompt, "", "Prompt for quota name", nil /*no validation*/, nil, "AskGet"},
+	"Hard":             {"Hard", "string", inputHardPrompt, "", "Prompt for hard", nil /*no validation*/, nil, "AskGet"},
+	"Scopes":           {"Scopes", "string", inputScopesPrompt, "", "Prompt for scopes", nil /*no validation*/, nil, "AskGet"},
 	// Iteration
 	"FromFileIteration":    {"Iterator", "int", inputFromFileIterationPrompt, "", "Prompt for from-file iteration", nil /*no validation*/, nil, "AskGet"},
 	"FromLiteralIteration": {"Iterator", "int", inputFromLiteralIterationPrompt, "", "Prompt for from-literal iteration", nil /*no validation*/, nil, "AskGet"},

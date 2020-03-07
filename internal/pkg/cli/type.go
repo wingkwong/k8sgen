@@ -20,6 +20,7 @@ type askVars struct {
 	DeploymentCmdOpts
 	SecretCmdOpts
 	RoleCmdOpts
+	QuotaCmdOpts
 }
 
 type askOpts struct {
@@ -71,7 +72,7 @@ type SecretCmdOpts struct {
 }
 
 type RoleCmdOpts struct {
-	// Nmae Of Role
+	// Name Of Role
 	RoleName string
 	// Resource that the rule applies to
 	Resource string
@@ -79,4 +80,13 @@ type RoleCmdOpts struct {
 	ResourceName string
 	// Verb that applies to the resources contained in the rule
 	Verb string
+}
+
+type QuotaCmdOpts struct {
+	// Name of Quota
+	QuotaName string
+	// A comma-delimited set of resource=quantity pairs that define a hard limit.
+	Hard string
+	// A comma-delimited set of quota scopes that must all match each object tracked by the quota.
+	Scopes string
 }
