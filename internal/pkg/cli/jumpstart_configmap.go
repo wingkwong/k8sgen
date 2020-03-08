@@ -73,7 +73,7 @@ func (o *askOpts) ExecuteConfigMapCmd() error {
 		cmd = cmd + fmt.Sprintf("--append-hash=%t ", o.AppendHash)
 	}
 
-	cmd = cmd + fmt.Sprintf("--output=%s > %s", o.OutputFormat, o.OutputPath)
+	cmd = cmd + fmt.Sprintf("--output=%s --dry-run=true > %s", o.OutputFormat, o.OutputPath)
 
 	if err := ExecCmd(cmd); err != nil {
 		return fmt.Errorf("Failed To execute command `%s` \n %w", cmd, err)
