@@ -22,6 +22,7 @@ type askVars struct {
 	RoleCmdOpts
 	QuotaCmdOpts
 	PriorityClassCmtOpts
+	NamespaceCmtOpts
 }
 
 type askOpts struct {
@@ -93,6 +94,7 @@ type QuotaCmdOpts struct {
 }
 
 type PriorityClassCmtOpts struct {
+	// Name of Priority Class
 	PriorityClassName string
 	// The value of this priority class.
 	Value int
@@ -102,4 +104,9 @@ type PriorityClassCmtOpts struct {
 	GlobalDefault bool
 	// Preemption-policy is the policy for preempting pods with lower priority
 	PreemptionPolicy string
+}
+
+type NamespaceCmtOpts struct {
+	// Name Of Namespace
+	NamespaceName string
 }

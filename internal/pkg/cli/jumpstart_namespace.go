@@ -5,13 +5,28 @@ import (
 )
 
 func (o *askOpts) AskNamespaceCmdOpts() error {
-	// TODO:
+	if err := o.Ask("NamespaceName"); err != nil {
+		return err
+	}
+
+	if err := o.AskOutputInfo(); err != nil {
+		return err
+	}
+
 	return nil
 }
 
 func (o *askOpts) ExecuteNamespaceCmd() error {
-	// TODO:
-	cmd := ""
+	var cmd string
+
+	// Example
+
+	// # Create a new namespace named my-namespace
+	// kubectl create namespace my-namespace
+
+	cmd = fmt.Sprintf("kubectl create namespace %s ", o.NamespaceName)
+
+	cmd = cmd + fmt.Sprintf("--output=%s > %s", o.OutputFormat, o.OutputPath)
 
 	if err := ExecCmd(cmd); err != nil {
 		return fmt.Errorf("Failed To execute command `%s` \n %w", cmd, err)

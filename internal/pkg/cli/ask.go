@@ -32,13 +32,12 @@ const (
 	inputQuotaPrompt                = "What quota you want to name?"
 	inputHardPrompt                 = "What hard you want to name?"
 	inputScopesPrompt               = "What scopes you want to name?"
-
-	inputPriorityClassPrompt    = "What priority class you want to name?"
-	inputValuePrompt            = "What value you want to have?"
-	inputDescriptionPrompt      = "What description you want to have?"
-	inputGlobalDefaultPrompt    = "Do you want this PriorityClass to be considered as the default priority?"
-	inputPreemptionPolicyPrompt = "What preemption-policy you want to have?"
-
+	inputPriorityClassPrompt        = "What priority class you want to name?"
+	inputValuePrompt                = "What value you want to have?"
+	inputDescriptionPrompt          = "What description you want to have?"
+	inputGlobalDefaultPrompt        = "Do you want this PriorityClass to be considered as the default priority?"
+	inputPreemptionPolicyPrompt     = "What preemption-policy you want to have?"
+	inputNamespacePrompt            = "What namespace you want to name?"
 	// select
 	inputOutputFormatPrompt  = "Please select an output format:"
 	inputSecretCmdNamePrompt = "Please select the type of secret:"
@@ -56,34 +55,33 @@ type Question struct {
 }
 
 var questions = map[string]Question{
-	"Kind":             {"KindName", "string", inputKindNamePrompt, "", "Select kind name", nil /*no validation*/, kindNames, "AskSelect"},
-	"DeploymentName":   {"DeploymentName", "string", inputDeploymentNamePrompt, "", "Prompt for deployment name", validateDeploymentName, nil, "AskGet"},
-	"Image":            {"ImageName", "string", inputImageNamePrompt, "", "Prompt for image name", nil /*no validation*/, nil, "AskGet"},
-	"OutputPath":       {"OutputPath", "string", inputOutputPathPrompt, "", "Prompt for output path", nil /*no validation*/, nil, "AskGet"},
-	"SecretName":       {"SecretName", "string", inputSecretNamePrompt, "", "Prompt for secret name", nil /*no validation*/, nil, "AskGet"},
-	"DockerServerName": {"DockerServer", "string", inputDockerServerNamePrompt, "", "Prompt for docker server name", nil /*no validation*/, nil, "AskGet"},
-	"DockerUserName":   {"DockerUserName", "string", inputDockerUserNamePrompt, "", "Prompt for docker user name", nil /*no validation*/, nil, "AskGet"},
-	"DockerPassword":   {"DockerUserPassword", "string", inputDockerUserPasswordPrompt, "", "Prompt for docker password", nil /*no validation*/, nil, "AskGetSecret"},
-	"DockerEmail":      {"DockerEmail", "string", inputDockerEmailPrompt, "", "Prompt for docker email", nil /*no validation*/, nil, "AskGet"}, // TODO: email validation
-	"CertPath":         {"CertPath", "string", inputDockerUserNamePrompt, "", "Prompt for cert path", nil /*no validation*/, nil, "AskGet"},
-	"KeyPath":          {"KeyPath", "string", inputDockerUserNamePrompt, "", "Prompt for key path", nil /*no validation*/, nil, "AskGet"},
-	"FromEnvFile":      {"FromEnvFile", "string", inputFromEnvFilePrompt, "", "Prompt for env", nil /*no validation*/, nil, "AskGet"},
-	"OutputFormat":     {"OutputFormat", "string", inputOutputFormatPrompt, "", "Prompt for output format", nil /*no validation*/, outputFormats, "AskSelect"},
-	"SecretCmdName":    {"SecretCmdName", "string", inputSecretCmdNamePrompt, "", "Prompt for secret cmd name", nil /*no validation*/, secretNames, "AskSelect"},
-	"RoleName":         {"RoleName", "string", inputRoleNamePrompt, "", "Prompt for role name", nil /*no validation*/, nil, "AskGet"},
-	"Resource":         {"Resource", "string", inputResourcePrompt, "", "Prompt for resource", nil /*no validation*/, nil, "AskGet"},
-	"ResourceName":     {"ResourceName", "string", inputResourceNamePrompt, "", "Prompt for resource name", nil /*no validation*/, nil, "AskGet"},
-	"Verb":             {"Verb", "string", inputVerbPrompt, "", "Prompt for verb", nil /*no validation*/, nil, "AskGet"},
-	"QuotaName":        {"QuotaName", "string", inputQuotaPrompt, "", "Prompt for quota name", nil /*no validation*/, nil, "AskGet"},
-	"Hard":             {"Hard", "string", inputHardPrompt, "", "Prompt for hard", nil /*no validation*/, nil, "AskGet"},
-	"Scopes":           {"Scopes", "string", inputScopesPrompt, "", "Prompt for scopes", nil /*no validation*/, nil, "AskGet"},
-
+	"Kind":              {"KindName", "string", inputKindNamePrompt, "", "Select kind name", nil /*no validation*/, kindNames, "AskSelect"},
+	"DeploymentName":    {"DeploymentName", "string", inputDeploymentNamePrompt, "", "Prompt for deployment name", validateDeploymentName, nil, "AskGet"},
+	"Image":             {"ImageName", "string", inputImageNamePrompt, "", "Prompt for image name", nil /*no validation*/, nil, "AskGet"},
+	"OutputPath":        {"OutputPath", "string", inputOutputPathPrompt, "", "Prompt for output path", nil /*no validation*/, nil, "AskGet"},
+	"SecretName":        {"SecretName", "string", inputSecretNamePrompt, "", "Prompt for secret name", nil /*no validation*/, nil, "AskGet"},
+	"DockerServerName":  {"DockerServer", "string", inputDockerServerNamePrompt, "", "Prompt for docker server name", nil /*no validation*/, nil, "AskGet"},
+	"DockerUserName":    {"DockerUserName", "string", inputDockerUserNamePrompt, "", "Prompt for docker user name", nil /*no validation*/, nil, "AskGet"},
+	"DockerPassword":    {"DockerUserPassword", "string", inputDockerUserPasswordPrompt, "", "Prompt for docker password", nil /*no validation*/, nil, "AskGetSecret"},
+	"DockerEmail":       {"DockerEmail", "string", inputDockerEmailPrompt, "", "Prompt for docker email", nil /*no validation*/, nil, "AskGet"}, // TODO: email validation
+	"CertPath":          {"CertPath", "string", inputDockerUserNamePrompt, "", "Prompt for cert path", nil /*no validation*/, nil, "AskGet"},
+	"KeyPath":           {"KeyPath", "string", inputDockerUserNamePrompt, "", "Prompt for key path", nil /*no validation*/, nil, "AskGet"},
+	"FromEnvFile":       {"FromEnvFile", "string", inputFromEnvFilePrompt, "", "Prompt for env", nil /*no validation*/, nil, "AskGet"},
+	"OutputFormat":      {"OutputFormat", "string", inputOutputFormatPrompt, "", "Prompt for output format", nil /*no validation*/, outputFormats, "AskSelect"},
+	"SecretCmdName":     {"SecretCmdName", "string", inputSecretCmdNamePrompt, "", "Prompt for secret cmd name", nil /*no validation*/, secretNames, "AskSelect"},
+	"RoleName":          {"RoleName", "string", inputRoleNamePrompt, "", "Prompt for role name", nil /*no validation*/, nil, "AskGet"},
+	"Resource":          {"Resource", "string", inputResourcePrompt, "", "Prompt for resource", nil /*no validation*/, nil, "AskGet"},
+	"ResourceName":      {"ResourceName", "string", inputResourceNamePrompt, "", "Prompt for resource name", nil /*no validation*/, nil, "AskGet"},
+	"Verb":              {"Verb", "string", inputVerbPrompt, "", "Prompt for verb", nil /*no validation*/, nil, "AskGet"},
+	"QuotaName":         {"QuotaName", "string", inputQuotaPrompt, "", "Prompt for quota name", nil /*no validation*/, nil, "AskGet"},
+	"Hard":              {"Hard", "string", inputHardPrompt, "", "Prompt for hard", nil /*no validation*/, nil, "AskGet"},
+	"Scopes":            {"Scopes", "string", inputScopesPrompt, "", "Prompt for scopes", nil /*no validation*/, nil, "AskGet"},
 	"PriorityClassName": {"PriorityClassName", "string", inputPriorityClassPrompt, "", "Prompt for priority class", nil /*no validation*/, nil, "AskGet"},
 	"Value":             {"Value", "int", inputValuePrompt, "", "Prompt for value", nil /*no validation*/, nil, "AskGet"},
 	"Description":       {"Description", "string", inputDescriptionPrompt, "", "Prompt for description", nil /*no validation*/, nil, "AskGet"},
 	"GlobalDefault":     {"GlobalDefault", "bool", inputGlobalDefaultPrompt, "", "Prompt for global default", nil /*no validation*/, yesOrNo, "AskSelect"},
 	"PreemptionPolicy":  {"PreemptionPolicy", "string", inputPreemptionPolicyPrompt, "", "Prompt for preemption policy", nil /*no validation*/, nil, "AskGet"},
-
+	"NamespaceName":     {"NamespaceName", "string", inputNamespacePrompt, "", "Prompt for namespace", nil /*no validation*/, nil, "AskGet"},
 	// Iteration
 	"FromFileIteration":    {"Iterator", "int", inputFromFileIterationPrompt, "", "Prompt for from-file iteration", nil /*no validation*/, nil, "AskGet"},
 	"FromLiteralIteration": {"Iterator", "int", inputFromLiteralIterationPrompt, "", "Prompt for from-literal iteration", nil /*no validation*/, nil, "AskGet"},
