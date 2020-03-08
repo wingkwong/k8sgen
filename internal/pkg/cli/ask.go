@@ -43,9 +43,18 @@ const (
 	inputNamespacePrompt            = "What namespace you want to name?"
 	inputConfigMapNamePrompt        = "What config map you want to name?"
 	inputAppenHashPrompt            = "Do you want to append a hash to its name?"
+	inputTCPPrompt                  = "Input Port pairs (e.g <port>:<targetPort>)"
+	inputClusterIPNamePrompt        = "What cluster IP name you want to name?"
+	inputClusterIPPrompt            = "What cluster IP you want to assign?"
+	inputExternalNamePrompt         = "What external name you want to name?"
+	inputExternalServiceNamePrompt  = "What external service name you want to name?"
+	inputLoadbalancerNamePrompt     = "What load balancer you want to name?"
+	inputNodePortNamePrompt         = "What node port you want to name?"
+
 	// select
-	inputOutputFormatPrompt  = "Please select an output format:"
-	inputSecretCmdNamePrompt = "Please select the type of secret:"
+	inputOutputFormatPrompt   = "Please select an output format:"
+	inputSecretCmdNamePrompt  = "Please select the type of secret:"
+	inputServiceCmdNamePrompt = "Please select the type of service:"
 )
 
 // promptHelpMessage
@@ -83,6 +92,14 @@ const (
 	inputAppenHashPromptHelpMessage            = ""
 	inputOutputFormatPromptHelpMessage         = ""
 	inputSecretCmdNamePromptHelpMessage        = ""
+	inputServiceCmdNamePromptHelpMessage       = ""
+	inputTCPPromptHelpMessage                  = ""
+	inputClusterIPNamePromptHelpMessage        = ""
+	inputClusterIPPromptHelpMessage            = ""
+	inputExternalNamePromptHelpMessage         = ""
+	inputExternalServiceNamePromptHelpMessage  = ""
+	inputLoadbalancerNamePromptHelpMessage     = ""
+	inputNodePortNamePromptHelpMessage         = ""
 )
 
 type Question struct {
@@ -97,39 +114,47 @@ type Question struct {
 }
 
 var questions = map[string]Question{
-	"Kind":              {"KindName", "string", inputKindNamePrompt, inputKindNamePromptHelpMessage, "Select kind name", nil /*no validation*/, kindNames, "AskSelect"},
-	"DeploymentName":    {"DeploymentName", "string", inputDeploymentNamePrompt, inputDeploymentNamePromptHelpMessage, "Prompt for deployment name", validateDeploymentName, nil, "AskGet"},
-	"Image":             {"ImageName", "string", inputImageNamePrompt, inputImageNamePromptHelpMessage, "Prompt for image name", nil /*no validation*/, nil, "AskGet"},
-	"OutputPath":        {"OutputPath", "string", inputOutputPathPrompt, inputOutputPathPromptHelpMessage, "Prompt for output path", nil /*no validation*/, nil, "AskGet"},
-	"SecretName":        {"SecretName", "string", inputSecretNamePrompt, inputSecretNamePromptHelpMessage, "Prompt for secret name", nil /*no validation*/, nil, "AskGet"},
-	"DockerServerName":  {"DockerServer", "string", inputDockerServerNamePrompt, inputDockerServerNamePromptHelpMessage, "Prompt for docker server name", nil /*no validation*/, nil, "AskGet"},
-	"DockerUserName":    {"DockerUserName", "string", inputDockerUserNamePrompt, inputDockerUserNamePromptHelpMessage, "Prompt for docker user name", nil /*no validation*/, nil, "AskGet"},
-	"DockerPassword":    {"DockerUserPassword", "string", inputDockerUserPasswordPrompt, inputDockerUserPasswordPromptHelpMessage, "Prompt for docker password", nil /*no validation*/, nil, "AskGetSecret"},
-	"DockerEmail":       {"DockerEmail", "string", inputDockerEmailPrompt, inputDockerEmailPromptHelpMessage, "Prompt for docker email", nil /*no validation*/, nil, "AskGet"}, // TODO: email validation
-	"CertPath":          {"CertPath", "string", inputCertPathPrompt, inputCertPathPromptHelpMessage, "Prompt for cert path", nil /*no validation*/, nil, "AskGet"},
-	"KeyPath":           {"KeyPath", "string", inputKeyPathPrompt, inputKeyPathPromptHelpMessage, "Prompt for key path", nil /*no validation*/, nil, "AskGet"},
-	"FromEnvFile":       {"FromEnvFile", "string", inputFromEnvFilePrompt, inputFromEnvFilePromptHelpMessage, "Prompt for env", nil /*no validation*/, nil, "AskGet"},
-	"OutputFormat":      {"OutputFormat", "string", inputOutputFormatPrompt, inputOutputFormatPromptHelpMessage, "Prompt for output format", nil /*no validation*/, outputFormats, "AskSelect"},
-	"SecretCmdName":     {"SecretCmdName", "string", inputSecretCmdNamePrompt, inputSecretCmdNamePromptHelpMessage, "Prompt for secret cmd name", nil /*no validation*/, secretNames, "AskSelect"},
-	"RoleName":          {"RoleName", "string", inputRoleNamePrompt, inputRoleNamePromptHelpMessage, "Prompt for role name", nil /*no validation*/, nil, "AskGet"},
-	"Resource":          {"Resource", "string", inputResourcePrompt, inputResourcePromptHelpMessage, "Prompt for resource", nil /*no validation*/, nil, "AskGet"},
-	"ResourceName":      {"ResourceName", "string", inputResourceNamePrompt, inputResourceNamePromptHelpMessage, "Prompt for resource name", nil /*no validation*/, nil, "AskGet"},
-	"Verb":              {"Verb", "string", inputVerbPrompt, inputVerbPromptHelpMessage, "Prompt for verb", nil /*no validation*/, nil, "AskGet"},
-	"QuotaName":         {"QuotaName", "string", inputQuotaPrompt, inputQuotaPromptHelpMessage, "Prompt for quota name", nil /*no validation*/, nil, "AskGet"},
-	"Hard":              {"Hard", "string", inputHardPrompt, inputHardPromptHelpMessage, "Prompt for hard", nil /*no validation*/, nil, "AskGet"},
-	"Scopes":            {"Scopes", "string", inputScopesPrompt, inputScopesPromptHelpMessage, "Prompt for scopes", nil /*no validation*/, nil, "AskGet"},
-	"PriorityClassName": {"PriorityClassName", "string", inputPriorityClassPrompt, inputPriorityClassPromptHelpMessage, "Prompt for priority class", nil /*no validation*/, nil, "AskGet"},
-	"Value":             {"Value", "int", inputValuePrompt, inputValuePromptHelpMessage, "Prompt for value", nil /*no validation*/, nil, "AskGet"},
-	"Description":       {"Description", "string", inputDescriptionPrompt, inputDescriptionPromptHelpMessage, "Prompt for description", nil /*no validation*/, nil, "AskGet"},
-	"GlobalDefault":     {"GlobalDefault", "bool", inputGlobalDefaultPrompt, inputGlobalDefaultPromptHelpMessage, "Prompt for global default", nil /*no validation*/, yesOrNo, "AskSelect"},
-	"AppendHash":        {"AppendHash", "bool", inputAppenHashPrompt, inputAppenHashPromptHelpMessage, "Prompt for append hash", nil /*no validation*/, yesOrNo, "AskSelect"},
-	"PreemptionPolicy":  {"PreemptionPolicy", "string", inputPreemptionPolicyPrompt, inputPreemptionPolicyPromptHelpMessage, "Prompt for preemption policy", nil /*no validation*/, nil, "AskGet"},
-	"NamespaceName":     {"NamespaceName", "string", inputNamespacePrompt, inputNamespacePromptHelpMessage, "Prompt for namespace", nil /*no validation*/, nil, "AskGet"},
-	"ConfigMapName":     {"ConfigMapName", "string", inputConfigMapNamePrompt, inputConfigMapNamePromptHelpMessage, "Prompt for config map", nil /*no validation*/, nil, "AskGet"},
+	"Kind":                {"KindName", "string", inputKindNamePrompt, inputKindNamePromptHelpMessage, "Select kind name", nil /*no validation*/, kindNames, "AskSelect"},
+	"DeploymentName":      {"DeploymentName", "string", inputDeploymentNamePrompt, inputDeploymentNamePromptHelpMessage, "Prompt for deployment name", validateDeploymentName, nil, "AskGet"},
+	"Image":               {"ImageName", "string", inputImageNamePrompt, inputImageNamePromptHelpMessage, "Prompt for image name", nil /*no validation*/, nil, "AskGet"},
+	"OutputPath":          {"OutputPath", "string", inputOutputPathPrompt, inputOutputPathPromptHelpMessage, "Prompt for output path", nil /*no validation*/, nil, "AskGet"},
+	"SecretName":          {"SecretName", "string", inputSecretNamePrompt, inputSecretNamePromptHelpMessage, "Prompt for secret name", nil /*no validation*/, nil, "AskGet"},
+	"DockerServerName":    {"DockerServer", "string", inputDockerServerNamePrompt, inputDockerServerNamePromptHelpMessage, "Prompt for docker server name", nil /*no validation*/, nil, "AskGet"},
+	"DockerUserName":      {"DockerUserName", "string", inputDockerUserNamePrompt, inputDockerUserNamePromptHelpMessage, "Prompt for docker user name", nil /*no validation*/, nil, "AskGet"},
+	"DockerPassword":      {"DockerUserPassword", "string", inputDockerUserPasswordPrompt, inputDockerUserPasswordPromptHelpMessage, "Prompt for docker password", nil /*no validation*/, nil, "AskGetSecret"},
+	"DockerEmail":         {"DockerEmail", "string", inputDockerEmailPrompt, inputDockerEmailPromptHelpMessage, "Prompt for docker email", nil /*no validation*/, nil, "AskGet"}, // TODO: email validation
+	"CertPath":            {"CertPath", "string", inputCertPathPrompt, inputCertPathPromptHelpMessage, "Prompt for cert path", nil /*no validation*/, nil, "AskGet"},
+	"KeyPath":             {"KeyPath", "string", inputKeyPathPrompt, inputKeyPathPromptHelpMessage, "Prompt for key path", nil /*no validation*/, nil, "AskGet"},
+	"FromEnvFile":         {"FromEnvFile", "string", inputFromEnvFilePrompt, inputFromEnvFilePromptHelpMessage, "Prompt for env", nil /*no validation*/, nil, "AskGet"},
+	"OutputFormat":        {"OutputFormat", "string", inputOutputFormatPrompt, inputOutputFormatPromptHelpMessage, "Prompt for output format", nil /*no validation*/, outputFormats, "AskSelect"},
+	"SecretCmdName":       {"SecretCmdName", "string", inputSecretCmdNamePrompt, inputSecretCmdNamePromptHelpMessage, "Prompt for secret cmd name", nil /*no validation*/, secretNames, "AskSelect"},
+	"RoleName":            {"RoleName", "string", inputRoleNamePrompt, inputRoleNamePromptHelpMessage, "Prompt for role name", nil /*no validation*/, nil, "AskGet"},
+	"Resource":            {"Resource", "string", inputResourcePrompt, inputResourcePromptHelpMessage, "Prompt for resource", nil /*no validation*/, nil, "AskGet"},
+	"ResourceName":        {"ResourceName", "string", inputResourceNamePrompt, inputResourceNamePromptHelpMessage, "Prompt for resource name", nil /*no validation*/, nil, "AskGet"},
+	"Verb":                {"Verb", "string", inputVerbPrompt, inputVerbPromptHelpMessage, "Prompt for verb", nil /*no validation*/, nil, "AskGet"},
+	"QuotaName":           {"QuotaName", "string", inputQuotaPrompt, inputQuotaPromptHelpMessage, "Prompt for quota name", nil /*no validation*/, nil, "AskGet"},
+	"Hard":                {"Hard", "string", inputHardPrompt, inputHardPromptHelpMessage, "Prompt for hard", nil /*no validation*/, nil, "AskGet"},
+	"Scopes":              {"Scopes", "string", inputScopesPrompt, inputScopesPromptHelpMessage, "Prompt for scopes", nil /*no validation*/, nil, "AskGet"},
+	"PriorityClassName":   {"PriorityClassName", "string", inputPriorityClassPrompt, inputPriorityClassPromptHelpMessage, "Prompt for priority class", nil /*no validation*/, nil, "AskGet"},
+	"Value":               {"Value", "int", inputValuePrompt, inputValuePromptHelpMessage, "Prompt for value", nil /*no validation*/, nil, "AskGet"},
+	"Description":         {"Description", "string", inputDescriptionPrompt, inputDescriptionPromptHelpMessage, "Prompt for description", nil /*no validation*/, nil, "AskGet"},
+	"GlobalDefault":       {"GlobalDefault", "bool", inputGlobalDefaultPrompt, inputGlobalDefaultPromptHelpMessage, "Prompt for global default", nil /*no validation*/, yesOrNo, "AskSelect"},
+	"AppendHash":          {"AppendHash", "bool", inputAppenHashPrompt, inputAppenHashPromptHelpMessage, "Prompt for append hash", nil /*no validation*/, yesOrNo, "AskSelect"},
+	"PreemptionPolicy":    {"PreemptionPolicy", "string", inputPreemptionPolicyPrompt, inputPreemptionPolicyPromptHelpMessage, "Prompt for preemption policy", nil /*no validation*/, nil, "AskGet"},
+	"NamespaceName":       {"NamespaceName", "string", inputNamespacePrompt, inputNamespacePromptHelpMessage, "Prompt for namespace", nil /*no validation*/, nil, "AskGet"},
+	"ConfigMapName":       {"ConfigMapName", "string", inputConfigMapNamePrompt, inputConfigMapNamePromptHelpMessage, "Prompt for config map", nil /*no validation*/, nil, "AskGet"},
+	"ServiceCmdName":      {"ServiceCmdName", "string", inputServiceCmdNamePrompt, inputServiceCmdNamePromptHelpMessage, "Prompt for service cmd name", nil /*no validation*/, seviceNames, "AskSelect"},
+	"TCP":                 {"TCP", "string", inputTCPPrompt, inputTCPPromptHelpMessage, "Prompt for tcp", nil /*no validation*/, nil, "AskGet"},
+	"ClusterIPName":       {"ClusterIPName", "string", inputClusterIPNamePrompt, inputClusterIPNamePromptHelpMessage, "Prompt for cluster ip name", nil /*no validation*/, nil, "AskGet"},
+	"ClusterIP":           {"ClusterIP", "string", inputClusterIPPrompt, inputClusterIPPromptHelpMessage, "Prompt for cluster ip", nil /*no validation*/, nil, "AskGet"},
+	"ExternalName":        {"ExternalName", "string", inputExternalNamePrompt, inputExternalNamePromptHelpMessage, "Prompt for external name", nil /*no validation*/, nil, "AskGet"},
+	"ExternalServiceName": {"ExternalServiceName", "string", inputExternalServiceNamePrompt, inputExternalServiceNamePromptHelpMessage, "Prompt for external service name", nil /*no validation*/, nil, "AskGet"},
+	"LoadbalancerName":    {"LoadbalancerName", "string", inputLoadbalancerNamePrompt, inputLoadbalancerNamePromptHelpMessage, "Prompt for load balancer name", nil /*no validation*/, nil, "AskGet"},
+	"NodePortName":        {"NodePortName", "string", inputNodePortNamePrompt, inputNodePortNamePromptHelpMessage, "Prompt for node port name", nil /*no validation*/, nil, "AskGet"},
 	// Iteration
 	"FromFileIteration":    {"Iterator", "int", inputFromFileIterationPrompt, inputFromFileIterationPromptHelpMessage, "Prompt for from-file iteration", nil /*no validation*/, nil, "AskGet"},
 	"FromLiteralIteration": {"Iterator", "int", inputFromLiteralIterationPrompt, inputFromLiteralIterationPromptHelpMessage, "Prompt for from-literal iteration", nil /*no validation*/, nil, "AskGet"},
-	//Array
+	// Array
 	"FromFile":    {"FromFile", "array", inputFromFilePrompt, inputFromFilePromptHelpMessage, "Prompt for from-file", nil /*no validation*/, nil, "AskGet"},
 	"FromLiteral": {"FromLiteral", "array", inputFromLiteralPrompt, inputFromLiteralPromptHelpMessage, "Prompt for from-literal", nil /*no validation*/, nil, "AskGet"},
 }

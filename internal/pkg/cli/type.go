@@ -24,6 +24,7 @@ type askVars struct {
 	PriorityClassCmtOpts
 	NamespaceCmtOpts
 	ConfigMapCmtOpts
+	ServiceCmdOpts
 	FileOpts
 }
 
@@ -102,6 +103,37 @@ type NamespaceCmtOpts struct {
 type ConfigMapCmtOpts struct {
 	// Name Of Config Map
 	ConfigMapName string
+}
+
+type ServiceCmdOpts struct {
+	// Name of Service CMD Name
+	ServiceCmdName string
+	// Port pairs can be specified as '<port>:<targetPort>'.
+	TCP string
+
+	// clusterip
+	// -------------
+	// Name of Cluster IP
+	ClusterIPName string
+	// Assign your own ClusterIP or set to 'None' for a 'headless' service (no loadbalancing).
+	ClusterIP string
+
+	// externalname
+	// -------------
+	// Name of ExternalName
+	ExternalName string
+	// External name of service
+	ExternalServiceName string
+
+	// loadbalancer
+	// -------------
+	// Name of Load Balancer
+	LoadbalancerName string
+
+	// nodeport
+	// -------------
+	// Name of Node Port
+	NodePortName string
 }
 
 type FileOpts struct {

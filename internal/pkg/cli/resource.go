@@ -56,6 +56,14 @@ const (
 	tlsCmdName            = "tls"
 )
 
+// Service
+const (
+	clusterIPCmdName    = "clusterip"
+	externalNameCmdName = "externalname"
+	loadbalancerCmdName = "loadbalancer"
+	nodePortCmdName     = "nodeport"
+)
+
 var kindNames = []string{
 	clusterRoleName,
 	clusterRoleBindingName,
@@ -89,4 +97,11 @@ var secretNames = []string{
 	dockerRegistryCmdName,
 	genericCmdName,
 	tlsCmdName,
+}
+
+var seviceNames = []string{
+	clusterIPCmdName,
+	externalNameCmdName,
+	loadbalancerCmdName,
+	nodePortCmdName,
 }
