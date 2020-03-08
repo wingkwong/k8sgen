@@ -48,9 +48,11 @@ const (
 	inputClusterIPPrompt            = "What cluster IP you want to assign?"
 	inputExternalNamePrompt         = "What external name you want to name?"
 	inputExternalServiceNamePrompt  = "What external service name you want to name?"
-	inputLoadbalancerNamePrompt     = "What load balancer you want to name?"
-	inputNodePortNamePrompt         = "What node port you want to name?"
-
+	inputLoadbalancerNamePrompt     = "What load balancer name you want to name?"
+	inputNodePortNamePrompt         = "What node port you want to use?"
+	inputJobNamePrompt              = "What job you want to name?"
+	inputCommandPrompt              = "What command you want to run?"
+	inputFromPrompt                 = "What resource to create a Job from (only cronjob is supported)?"
 	// select
 	inputOutputFormatPrompt   = "Please select an output format:"
 	inputSecretCmdNamePrompt  = "Please select the type of secret:"
@@ -100,6 +102,9 @@ const (
 	inputExternalServiceNamePromptHelpMessage  = ""
 	inputLoadbalancerNamePromptHelpMessage     = ""
 	inputNodePortNamePromptHelpMessage         = ""
+	inputJobNamePromptHelpMessage              = "Name of Job"
+	inputCommandPromptHelpMessage              = "Command to-be-run"
+	inputFromPromptHelpMessage                 = "The name of the resource to create a Job from (only cronjob is supported)."
 )
 
 type Question struct {
@@ -151,6 +156,9 @@ var questions = map[string]Question{
 	"ExternalServiceName": {"ExternalServiceName", "string", inputExternalServiceNamePrompt, inputExternalServiceNamePromptHelpMessage, "Prompt for external service name", nil /*no validation*/, nil, "AskGet"},
 	"LoadbalancerName":    {"LoadbalancerName", "string", inputLoadbalancerNamePrompt, inputLoadbalancerNamePromptHelpMessage, "Prompt for load balancer name", nil /*no validation*/, nil, "AskGet"},
 	"NodePortName":        {"NodePortName", "string", inputNodePortNamePrompt, inputNodePortNamePromptHelpMessage, "Prompt for node port name", nil /*no validation*/, nil, "AskGet"},
+	"JobName":             {"JobName", "string", inputJobNamePrompt, inputJobNamePromptHelpMessage, "Prompt for job name", nil /*no validation*/, nil, "AskGet"},
+	"Command":             {"Command", "string", inputCommandPrompt, inputCommandPromptHelpMessage, "Prompt for command", nil /*no validation*/, nil, "AskGet"},
+	"FromResource":        {"FromResource", "string", inputFromPrompt, inputFromPromptHelpMessage, "Prompt for from-resource", nil /*no validation*/, nil, "AskGet"},
 	// Iteration
 	"FromFileIteration":    {"Iterator", "int", inputFromFileIterationPrompt, inputFromFileIterationPromptHelpMessage, "Prompt for from-file iteration", nil /*no validation*/, nil, "AskGet"},
 	"FromLiteralIteration": {"Iterator", "int", inputFromLiteralIterationPrompt, inputFromLiteralIterationPromptHelpMessage, "Prompt for from-literal iteration", nil /*no validation*/, nil, "AskGet"},

@@ -25,6 +25,7 @@ type askVars struct {
 	NamespaceCmtOpts
 	ConfigMapCmtOpts
 	ServiceCmdOpts
+	JobCmtOpts
 	FileOpts
 }
 
@@ -134,6 +135,15 @@ type ServiceCmdOpts struct {
 	// -------------
 	// Name of Node Port
 	NodePortName string
+}
+
+type JobCmtOpts struct {
+	// Name of Job
+	JobName string
+	// Command to-be-run
+	Command string
+	// The name of the resource to create a Job from (only cronjob is supported).
+	FromResource string
 }
 
 type FileOpts struct {
