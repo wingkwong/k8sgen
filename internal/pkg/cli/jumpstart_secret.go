@@ -62,6 +62,10 @@ func (o *askOpts) AskSecretCmdOpts() error {
 		return fmt.Errorf("No available Secret option: %s", o.SecretCmdName)
 	}
 
+	if err := o.Ask("AppendHash"); err != nil {
+		return err
+	}
+
 	if err := o.AskOutputInfo(); err != nil {
 		return err
 	}
@@ -70,7 +74,6 @@ func (o *askOpts) AskSecretCmdOpts() error {
 }
 
 func (o *askOpts) ExecuteSecretCmd() error {
-
 	var cmd string
 
 	switch o.SecretCmdName {
@@ -97,6 +100,10 @@ func (o *askOpts) ExecuteSecretCmd() error {
 
 	default:
 		return fmt.Errorf("No execution available for Secret: %s", o.SecretCmdName)
+	}
+
+	if o.AppendHash {
+		cmd = cmd + fmt.Sprintf("--append-hash=%t ", o.AppendHash)
 	}
 
 	if err := ExecCmd(cmd); err != nil {
