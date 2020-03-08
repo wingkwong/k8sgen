@@ -13,6 +13,13 @@ This command utilises ``kubectl`` to create a jumpstart version of a resource fi
 ```bash
 k8sgen jumpstart
 
+ _    ___                       
+| | _( _ ) ___  __ _  ___ _ __  
+| |/ / _ \/ __|/ _  |/ _ | |_ \ 
+|   | (_) \__ | (_| |  __| | | |
+|_|\_\___/|___/\__, |\___|_| |_|
+                |___/
+
 ? What kind of object you want to create? [Use arrows to move, type to filter]
   ClusterRole
   ClusterRoleBinding
