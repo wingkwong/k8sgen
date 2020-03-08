@@ -21,10 +21,10 @@ func (o *askOpts) AskDeploymentCmdOpts() error {
 }
 
 func (o *askOpts) ExecuteDeploymentCmd() error {
-	// 	Options:
-	//       --dry-run=false: If true, only print the object that would be sent, without sending it.
-	//       --image=[]: Image name to run.
-	//   -o, --output='': Output format. One of: json|yaml|name|go-template|go-template-file|template|templatefile|jsonpath|jsonpath-file.
+	// Example:
+
+	// # Create a new deployment named my-dep that runs the busybox image.
+	// kubectl create deployment my-dep --image=busybox
 
 	cmd := fmt.Sprintf("kubectl create deployment %s --image=%s --output=%s --dry-run=true > %s", o.DeploymentName, o.ImageName, o.OutputFormat, o.OutputPath)
 
