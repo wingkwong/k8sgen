@@ -38,6 +38,8 @@ const (
 	inputGlobalDefaultPrompt        = "Do you want this PriorityClass to be considered as the default priority?"
 	inputPreemptionPolicyPrompt     = "What preemption-policy you want to have?"
 	inputNamespacePrompt            = "What namespace you want to name?"
+	inputConfigMapNamePrompt        = "What config map you want to name?"
+	inputAppenHashPrompt            = "Do you want to append a hash to its name?"
 	// select
 	inputOutputFormatPrompt  = "Please select an output format:"
 	inputSecretCmdNamePrompt = "Please select the type of secret:"
@@ -80,13 +82,16 @@ var questions = map[string]Question{
 	"Value":             {"Value", "int", inputValuePrompt, "", "Prompt for value", nil /*no validation*/, nil, "AskGet"},
 	"Description":       {"Description", "string", inputDescriptionPrompt, "", "Prompt for description", nil /*no validation*/, nil, "AskGet"},
 	"GlobalDefault":     {"GlobalDefault", "bool", inputGlobalDefaultPrompt, "", "Prompt for global default", nil /*no validation*/, yesOrNo, "AskSelect"},
+	"AppendHash":        {"AppendHash", "bool", inputAppenHashPrompt, "", "Prompt for append hash", nil /*no validation*/, yesOrNo, "AskSelect"},
 	"PreemptionPolicy":  {"PreemptionPolicy", "string", inputPreemptionPolicyPrompt, "", "Prompt for preemption policy", nil /*no validation*/, nil, "AskGet"},
 	"NamespaceName":     {"NamespaceName", "string", inputNamespacePrompt, "", "Prompt for namespace", nil /*no validation*/, nil, "AskGet"},
+	"ConfigMapName":     {"ConfigMapName", "string", inputConfigMapNamePrompt, "", "Prompt for config map", nil /*no validation*/, nil, "AskGet"},
 	// Iteration
 	"FromFileIteration":    {"Iterator", "int", inputFromFileIterationPrompt, "", "Prompt for from-file iteration", nil /*no validation*/, nil, "AskGet"},
 	"FromLiteralIteration": {"Iterator", "int", inputFromLiteralIterationPrompt, "", "Prompt for from-literal iteration", nil /*no validation*/, nil, "AskGet"},
 	//Array
-	"FromFile": {"FromFile", "array", inputFromFilePrompt, "", "Prompt for from-file", nil /*no validation*/, nil, "AskGet"},
+	"FromFile":    {"FromFile", "array", inputFromFilePrompt, "", "Prompt for from-file", nil /*no validation*/, nil, "AskGet"},
+	"FromLiteral": {"FromLiteral", "array", inputFromLiteralPrompt, "", "Prompt for from-literal", nil /*no validation*/, nil, "AskGet"},
 }
 
 var yesOrNo = []string{"Yes", "No"}

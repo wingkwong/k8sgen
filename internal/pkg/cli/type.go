@@ -23,6 +23,8 @@ type askVars struct {
 	QuotaCmdOpts
 	PriorityClassCmtOpts
 	NamespaceCmtOpts
+	ConfigMapCmtOpts
+	FileOpts
 }
 
 type askOpts struct {
@@ -53,24 +55,10 @@ type SecretCmdOpts struct {
 	DockerUserPassword string
 	// Email for Docker registry
 	DockerEmail string
-	// Key files can be specified using their file path, in which case a default name will be given to them
-	// or optionally with a name and file path, in which case the given name will be used
-	// Specifying a directory will iterate each named file in the directory that is a valid secret key
-	FromFile []string
-	// Append a hash of the secret to its name
-	AppendHash bool
 	// Secret cert path
 	CertPath string
 	// Secret key path
 	KeyPath string
-	// Secret from Literal input
-	FromLiteral []string
-	// Secret from environment file
-	FromEnvFile string
-	// Number of iteration for the same question for fromFile
-	FromFileIteration int
-	// Number of iteration for the same question for fromLiteral
-	FromLiteralIteration int
 }
 
 type RoleCmdOpts struct {
@@ -109,4 +97,26 @@ type PriorityClassCmtOpts struct {
 type NamespaceCmtOpts struct {
 	// Name Of Namespace
 	NamespaceName string
+}
+
+type ConfigMapCmtOpts struct {
+	// Name Of Config Map
+	ConfigMapName string
+}
+
+type FileOpts struct {
+	// Key files can be specified using their file path, in which case a default name will be given to them
+	// or optionally with a name and file path, in which case the given name will be used
+	// Specifying a directory will iterate each named file in the directory that is a valid secret key
+	FromFile []string
+	// Specify a key and literal value to insert (i.e. mykey=somevalue)
+	FromLiteral []string
+	// Specify the path to a file to read lines of key=val pairs (i.e. a Docker .env file).
+	FromEnvFile string
+	// Number of iteration for the same question for fromFile
+	FromFileIteration int
+	// Number of iteration for the same question for fromLiteral
+	FromLiteralIteration int
+	// Append a hash to its name
+	AppendHash bool
 }
