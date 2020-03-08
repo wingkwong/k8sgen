@@ -20,6 +20,7 @@ func (o *askOpts) AskPriorityClassCmdOpts() error {
 	if err := o.Ask("GlobalDefault"); err != nil {
 		return err
 	}
+
 	if err := o.Ask("PreemptionPolicy"); err != nil {
 		return err
 	}
