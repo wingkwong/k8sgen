@@ -78,7 +78,7 @@ func (o *askOpts) ExecuteSecretCmd() error {
 
 	switch o.SecretCmdName {
 	case dockerRegistryCmdName:
-		cmd = fmt.Sprintf("kubectl create secret docker-registry %s --docker-server=%s --docker-username=%s --docker-password=%s --docker-email=%s --output=%s--dry-run=true > %s", o.SecretName, o.DockerServer, o.DockerUserName, o.DockerUserPassword, o.DockerEmail, o.OutputFormat, o.OutputPath)
+		cmd = fmt.Sprintf("kubectl create secret docker-registry %s --docker-server=%s --docker-username=%s --docker-password=%s --docker-email=%s ", o.SecretName, o.DockerServer, o.DockerUserName, o.DockerUserPassword, o.DockerEmail)
 	case genericCmdName:
 		cmd = fmt.Sprintf("kubectl create secret generic %s ", o.SecretName)
 
@@ -93,10 +93,8 @@ func (o *askOpts) ExecuteSecretCmd() error {
 		if len(o.FromLiteral) == 0 && len(o.FromFile) == 0 && o.FromEnvFile != "" {
 			cmd = cmd + fmt.Sprintf("--from-env-file=%s ", o.FromEnvFile)
 		}
-
-		cmd = cmd + fmt.Sprintf("--output=%s --dry-run=true > %s", o.OutputFormat, o.OutputPath)
 	case tlsCmdName:
-		cmd = fmt.Sprintf("kubectl create secret tls %s --cert=%s --key=%s --output=%s --dry-run=true > %s", o.SecretName, o.CertPath, o.KeyPath, o.OutputFormat, o.OutputPath)
+		cmd = fmt.Sprintf("kubectl create secret tls %s --cert=%s --key=%s ", o.SecretName, o.CertPath, o.KeyPath)
 
 	default:
 		return fmt.Errorf("No execution available for Secret: %s", o.SecretCmdName)
@@ -105,6 +103,8 @@ func (o *askOpts) ExecuteSecretCmd() error {
 	if o.AppendHash {
 		cmd = cmd + fmt.Sprintf("--append-hash=%t ", o.AppendHash)
 	}
+
+	cmd = cmd + fmt.Sprintf("--output=%s --dry-run=true > %s ", o.OutputFormat, o.OutputPath)
 
 	if err := ExecCmd(cmd); err != nil {
 		return fmt.Errorf("Failed To execute command `%s` \n %w", cmd, err)
