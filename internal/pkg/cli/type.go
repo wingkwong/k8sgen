@@ -26,6 +26,7 @@ type askVars struct {
 	ConfigMapCmtOpts
 	ServiceCmdOpts
 	JobCmtOpts
+	PodDisruptionBudget
 	FileOpts
 }
 
@@ -144,6 +145,17 @@ type JobCmtOpts struct {
 	Command string
 	// The name of the resource to create a Job from (only cronjob is supported).
 	FromResource string
+}
+
+type PodDisruptionBudget struct {
+	// Name of Pod Disruption Budget
+	PodDisruptionBudgetName string
+	// The maximum number or percentage of unavailable pods this budget requires.
+	MaxUnavailable string
+	// The minimum number or percentage of available pods this budget requires.
+	MinAvailable string
+	// A label selector to use for this budget. Only equality-based selector requirements are supported.
+	Selector string
 }
 
 type FileOpts struct {
