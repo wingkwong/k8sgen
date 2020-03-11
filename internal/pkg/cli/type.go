@@ -28,6 +28,7 @@ type askVars struct {
 	JobCmdOpts
 	PodDisruptionBudgetCmdOpts
 	ServiceAccountCmdOpts
+	ClusterRoleCmdOpts
 	FileOpts
 }
 
@@ -162,6 +163,13 @@ type PodDisruptionBudgetCmdOpts struct {
 type ServiceAccountCmdOpts struct {
 	// Name of Service Account
 	ServiceAccountName string
+}
+
+type ClusterRoleCmdOpts struct {
+	// Name of Cluster Role
+	ClusterRoleName string
+	// An aggregation label selector for combining ClusterRoles
+	AggregationRule string
 }
 
 type FileOpts struct {

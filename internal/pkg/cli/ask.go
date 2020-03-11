@@ -58,6 +58,8 @@ const (
 	inputMinAvailablePrompt            = "What is the minimum number or percentage of available pods this budget requires?"
 	inputSelectorPrompt                = "What label selector to use for this budget?"
 	inputServiceAccountNamePrompt      = "What service account you wnat name?"
+	inputClusterRoleNamePrompt         = "What cluster role you wnat name?"
+	inputAggregationRulePrompt         = "What is the aggregation label selector for combining ClusterRoles?"
 
 	// select
 	inputOutputFormatPrompt   = "Please select an output format:"
@@ -116,6 +118,8 @@ const (
 	inputMinAvailablePromptHelpMessage            = "The minimum number or percentage of available pods this budget requires"
 	inputSelectorPromptHelpMessage                = "A label selector to use for this budget. Only equality-based selector requirements are supported"
 	inputServiceAccountNamePromptHelpMessage      = "Name of Service Account"
+	inputClusterRoleNamePromptHelpMessage         = "Name of Cluster Role"
+	inputAggregationRulePromptHelpMessage         = "An aggregation label selector for combining ClusterRoles"
 )
 
 type Question struct {
@@ -175,6 +179,8 @@ var questions = map[string]Question{
 	"MinAvailable":            {"MinAvailable", "string", inputMinAvailablePrompt, inputMinAvailablePromptHelpMessage, "Prompt for node port name", nil /*no validation*/, nil, "AskGet"},
 	"Selector":                {"Selector", "string", inputSelectorPrompt, inputSelectorPromptHelpMessage, "Prompt for node port name", nil /*no validation*/, nil, "AskGet"},
 	"ServiceAccountName":      {"ServiceAccountName", "string", inputServiceAccountNamePrompt, inputServiceAccountNamePromptHelpMessage, "Prompt for node port name", nil /*no validation*/, nil, "AskGet"},
+	"ClusterRoleName":         {"ClusterRoleName", "string", inputClusterRoleNamePrompt, inputClusterRoleNamePromptHelpMessage, "Prompt for node port name", nil /*no validation*/, nil, "AskGet"},
+	"AggregationRule":         {"AggregationRule", "string", inputAggregationRulePrompt, inputAggregationRulePromptHelpMessage, "Prompt for node port name", nil /*no validation*/, nil, "AskGet"},
 	// Iteration
 	"FromFileIteration":    {"Iterator", "int", inputFromFileIterationPrompt, inputFromFileIterationPromptHelpMessage, "Prompt for from-file iteration", nil /*no validation*/, nil, "AskGet"},
 	"FromLiteralIteration": {"Iterator", "int", inputFromLiteralIterationPrompt, inputFromLiteralIterationPromptHelpMessage, "Prompt for from-literal iteration", nil /*no validation*/, nil, "AskGet"},
