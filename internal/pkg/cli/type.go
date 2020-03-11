@@ -27,6 +27,7 @@ type askVars struct {
 	ServiceCmdOpts
 	JobCmtOpts
 	PodDisruptionBudget
+	ServiceAccountCmdOpts
 	FileOpts
 }
 
@@ -156,6 +157,11 @@ type PodDisruptionBudget struct {
 	MinAvailable string
 	// A label selector to use for this budget. Only equality-based selector requirements are supported.
 	Selector string
+}
+
+type ServiceAccountCmdOpts struct {
+	// Name of Service Account
+	ServiceAccountName string
 }
 
 type FileOpts struct {
