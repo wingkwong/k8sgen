@@ -25,8 +25,8 @@ type askVars struct {
 	NamespaceCmtOpts
 	ConfigMapCmtOpts
 	ServiceCmdOpts
-	JobCmtOpts
-	PodDisruptionBudget
+	JobCmdOpts
+	PodDisruptionBudgetCmdOpts
 	ServiceAccountCmdOpts
 	FileOpts
 }
@@ -139,7 +139,7 @@ type ServiceCmdOpts struct {
 	NodePortName string
 }
 
-type JobCmtOpts struct {
+type JobCmdOpts struct {
 	// Name of Job
 	JobName string
 	// Command to-be-run
@@ -148,7 +148,7 @@ type JobCmtOpts struct {
 	FromResource string
 }
 
-type PodDisruptionBudget struct {
+type PodDisruptionBudgetCmdOpts struct {
 	// Name of Pod Disruption Budget
 	PodDisruptionBudgetName string
 	// The maximum number or percentage of unavailable pods this budget requires.
