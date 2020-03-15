@@ -53,13 +53,15 @@ const (
 	inputJobNamePrompt                 = "What job you want to name?"
 	inputCommandPrompt                 = "What command you want to run?"
 	inputFromPrompt                    = "What resource to create a Job from (only cronjob is supported)?"
-	inputPodDisruptionBudgetNamePrompt = "What pod disruption budget you wnat name?"
+	inputPodDisruptionBudgetNamePrompt = "What pod disruption budget you want name?"
 	inputMaxUnavailablePrompt          = "What is the maximum number or percentage of unavailable pods this budget requires?"
 	inputMinAvailablePrompt            = "What is the minimum number or percentage of available pods this budget requires?"
 	inputSelectorPrompt                = "What label selector to use for this budget?"
-	inputServiceAccountNamePrompt      = "What service account you wnat name?"
-	inputClusterRoleNamePrompt         = "What cluster role you wnat name?"
+	inputServiceAccountNamePrompt      = "What service account you want name?"
+	inputClusterRoleNamePrompt         = "What cluster role you want name?"
 	inputAggregationRulePrompt         = "What is the aggregation label selector for combining ClusterRoles?"
+	inputUserPrompt                    = "What user you want to use?"
+	inputGroupPrompt                   = "What group you want to use?"
 
 	// select
 	inputOutputFormatPrompt   = "Please select an output format:"
@@ -120,6 +122,8 @@ const (
 	inputServiceAccountNamePromptHelpMessage      = "Name of Service Account"
 	inputClusterRoleNamePromptHelpMessage         = "Name of Cluster Role"
 	inputAggregationRulePromptHelpMessage         = "An aggregation label selector for combining ClusterRoles"
+	inputUserPromptHelpMessage                    = "The name of the kubeconfig user to use"
+	inputGroupPromptHelpMessage                   = "Groups to bind to the clusterrole"
 )
 
 type Question struct {
@@ -181,6 +185,8 @@ var questions = map[string]Question{
 	"ServiceAccountName":      {"ServiceAccountName", "string", inputServiceAccountNamePrompt, inputServiceAccountNamePromptHelpMessage, "Prompt for node port name", nil /*no validation*/, nil, "AskGet"},
 	"ClusterRoleName":         {"ClusterRoleName", "string", inputClusterRoleNamePrompt, inputClusterRoleNamePromptHelpMessage, "Prompt for node port name", nil /*no validation*/, nil, "AskGet"},
 	"AggregationRule":         {"AggregationRule", "string", inputAggregationRulePrompt, inputAggregationRulePromptHelpMessage, "Prompt for node port name", nil /*no validation*/, nil, "AskGet"},
+	"User":                    {"User", "string", inputUserPrompt, inputUserPromptHelpMessage, "Prompt for user", nil /*no validation*/, nil, "AskGet"},
+	"Group":                   {"Group", "string", inputGroupPrompt, inputGroupPromptHelpMessage, "Prompt for group", nil /*no validation*/, nil, "AskGet"},
 	// Iteration
 	"FromFileIteration":    {"Iterator", "int", inputFromFileIterationPrompt, inputFromFileIterationPromptHelpMessage, "Prompt for from-file iteration", nil /*no validation*/, nil, "AskGet"},
 	"FromLiteralIteration": {"Iterator", "int", inputFromLiteralIterationPrompt, inputFromLiteralIterationPromptHelpMessage, "Prompt for from-literal iteration", nil /*no validation*/, nil, "AskGet"},
