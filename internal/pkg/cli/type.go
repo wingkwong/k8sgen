@@ -75,6 +75,10 @@ type RoleCmdOpts struct {
 	ResourceName string
 	// Verb that applies to the resources contained in the rule
 	Verb string
+	// The name of the kubeconfig user to use
+	User string
+	// Groups to bind to the role
+	Group string
 }
 
 type QuotaCmdOpts struct {
