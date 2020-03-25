@@ -1,57 +1,19 @@
 package cli
 
 import (
-	"errors"
 	"fmt"
 	"github.com/spf13/cobra"
 )
 
-type jumpStartVars struct {
-	*GlobalOpts
-	DeploymentCmdOpts
-	SecretCmdOpts
-
-	KindName string
-}
-
-type jumpStartOpts struct {
-	jumpStartVars
-}
-
-func newJumpStartOpts(vars jumpStartVars) (*jumpStartOpts, error) {
-	return &jumpStartOpts{
-		jumpStartVars: vars,
-	}, nil
-}
-
-func (o *jumpStartOpts) Ask() error {
-	if err := o.askKindName(); err != nil {
+func (o *askOpts) AskJumpStart() error {
+	if err := o.Ask("Kind"); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (o *jumpStartOpts) askKindName() error {
-	if o.KindName != "" {
-		return nil
-	}
-
-	names := getKindNames()
-
-	if len(names) == 0 {
-		return errors.New("No object is found")
-	}
-
-	selectedKindName, err := o.prompt.SelectOne("What kind of object you want to create?", "", names)
-	if err != nil {
-		return fmt.Errorf("Select kind name: %w", err)
-	}
-	o.KindName = selectedKindName
-	return nil
-}
-
-func (o *jumpStartOpts) Execute() error {
+func (o *askOpts) ExecuteJumpStart() error {
 	switch o.KindName {
 	case clusterRoleName:
 		if err := o.ExecuteJumpStartClusterRoleCmd(); err != nil {
@@ -117,7 +79,7 @@ func (o *jumpStartOpts) Execute() error {
 }
 
 func BuildJumpStartCmd() *cobra.Command {
-	vars := jumpStartVars{
+	vars := askVars{
 		GlobalOpts: NewGlobalOpts(),
 	}
 	cmd := &cobra.Command{
@@ -130,15 +92,15 @@ func BuildJumpStartCmd() *cobra.Command {
 				return fmt.Errorf("kubectl is not installed")
 			}
 
-			opts, err := newJumpStartOpts(vars)
+			opts, err := newAskOpts(vars)
 			if err != nil {
 				return err
 			}
 
-			if err := opts.Ask(); err != nil {
+			if err := opts.AskJumpStart(); err != nil {
 				return err
 			}
-			if err := opts.Execute(); err != nil {
+			if err := opts.ExecuteJumpStart(); err != nil {
 				return err
 			}
 			return nil

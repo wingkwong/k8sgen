@@ -1,11 +1,20 @@
 package main
 
 import (
-	"github.com/wingkwong/k8sgen/internal/pkg/cli"
+	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/wingkwong/k8sgen/internal/pkg/cli"
 )
+
+const k8sgenLogo = `
+ _    ___                       
+| | _( _ ) ___  __ _  ___ _ __  
+| |/ / _ \/ __|/ _  |/ _ | |_ \ 
+|   | (_) \__ | (_| |  __| | | |
+|_|\_\___/|___/\__, |\___|_| |_|
+	 	|___/`
 
 func main() {
 	cmd := buildRootCmd()
@@ -15,15 +24,15 @@ func main() {
 }
 
 func buildRootCmd() *cobra.Command {
+	fmt.Println(k8sgenLogo)
 	cmd := &cobra.Command{
 		Use:              "k8sgen",
-		Short:            "Generating Kubenetes Resource Configurations in an Interactive CLI",
+		Short:            "Generating Kubernetes Resource Configurations in an Interactive CLI",
 		Example:          `k8sgen`,
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {},
 		SilenceUsage:     true,
 	}
 
-	cmd.AddCommand(cli.BuildCreateCmd())
 	cmd.AddCommand(cli.BuildJumpStartCmd())
 
 	return cmd

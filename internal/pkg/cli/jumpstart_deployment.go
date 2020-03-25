@@ -4,12 +4,12 @@ import (
 	"fmt"
 )
 
-func (o *jumpStartOpts) AskDeploymentCmdOpts() error {
-	if err := o.AskDeploymentName(); err != nil {
+func (o *askOpts) AskDeploymentCmdOpts() error {
+	if err := o.Ask("DeploymentName"); err != nil {
 		return err
 	}
 
-	if err := o.AskImageName(); err != nil {
+	if err := o.Ask("Image"); err != nil {
 		return err
 	}
 
@@ -20,13 +20,13 @@ func (o *jumpStartOpts) AskDeploymentCmdOpts() error {
 	return nil
 }
 
-func (o *jumpStartOpts) ExecuteDeploymentCmd() error {
-	// 	Options:
-	//       --dry-run=false: If true, only print the object that would be sent, without sending it.
-	//       --image=[]: Image name to run.
-	//   -o, --output='': Output format. One of: json|yaml|name|go-template|go-template-file|template|templatefile|jsonpath|jsonpath-file.
+func (o *askOpts) ExecuteDeploymentCmd() error {
+	// Example:
 
-	cmd := fmt.Sprintf("kubectl create deployment %s --image=%s --output=%s --dry-run=true > %s", o.deploymentName, o.imageName, o.outputFormat, o.outputPath)
+	// # Create a new deployment named my-dep that runs the busybox image.
+	// kubectl create deployment my-dep --image=busybox
+
+	cmd := fmt.Sprintf("kubectl create deployment %s --image=%s --output=%s --dry-run=true > %s", o.DeploymentName, o.ImageName, o.OutputFormat, o.OutputPath)
 
 	if err := ExecCmd(cmd); err != nil {
 		return fmt.Errorf("Failed To execute command: \n %w", err)
@@ -35,7 +35,7 @@ func (o *jumpStartOpts) ExecuteDeploymentCmd() error {
 	return nil
 }
 
-func (o *jumpStartOpts) ExecuteJumpStartDeploymentCmd() error {
+func (o *askOpts) ExecuteJumpStartDeploymentCmd() error {
 	if err := o.AskDeploymentCmdOpts(); err != nil {
 		return err
 	}

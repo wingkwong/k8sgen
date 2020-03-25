@@ -2,7 +2,7 @@
 
 k8sgen is an utility which is designed to guide users to build their Kubernetes resources in an interactive CLI. 
 
-[![Build Status](https://travis-ci.com/wingkwong/k8sgen.svg?branch=master)](https://travis-ci.com/wingkwong/k8sgen) ![Stability:Experimental](https://img.shields.io/badge/stability-experimental-orange) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://travis-ci.com/wingkwong/k8sgen.svg?branch=master)](https://travis-ci.com/wingkwong/k8sgen) ![Stability:Experimental](https://img.shields.io/badge/stability-experimental-orange) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Go Report Card](https://goreportcard.com/badge/github.com/wingkwong/k8sgen)](https://goreportcard.com/report/github.com/wingkwong/k8sgen)
 
 ## Usage
 
@@ -12,6 +12,13 @@ This command utilises ``kubectl`` to create a jumpstart version of a resource fi
 
 ```bash
 k8sgen jumpstart
+
+ _    ___                       
+| | _( _ ) ___  __ _  ___ _ __  
+| |/ / _ \/ __|/ _  |/ _ | |_ \ 
+|   | (_) \__ | (_| |  __| | | |
+|_|\_\___/|___/\__, |\___|_| |_|
+                |___/
 
 ? What kind of object you want to create? [Use arrows to move, type to filter]
   ClusterRole
@@ -67,10 +74,6 @@ spec:
         resources: {}
 status: {}
 ```
-
-``k8sgen create`` - create a complex resource file from scratch 
-
-TBC
 
 ## Contributing
 

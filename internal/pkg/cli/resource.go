@@ -56,43 +56,52 @@ const (
 	tlsCmdName            = "tls"
 )
 
-func getKindNames() []string {
-	return []string{
-		clusterRoleName,
-		clusterRoleBindingName,
-		configmapName,
-		deploymentName,
-		jobName,
-		namespaceName,
-		podDisruptionBudgetName,
-		priorityClassName,
-		quotaName,
-		roleName,
-		roleBindingName,
-		secretName,
-		serviceName,
-		serviceAccountName,
-	}
+// Service
+const (
+	clusterIPCmdName    = "clusterip"
+	externalNameCmdName = "externalname"
+	loadbalancerCmdName = "loadbalancer"
+	nodePortCmdName     = "nodeport"
+)
+
+var kindNames = []string{
+	clusterRoleName,
+	clusterRoleBindingName,
+	configmapName,
+	deploymentName,
+	jobName,
+	namespaceName,
+	podDisruptionBudgetName,
+	priorityClassName,
+	quotaName,
+	roleName,
+	roleBindingName,
+	secretName,
+	serviceName,
+	serviceAccountName,
 }
 
-func getOutputFormats() []string {
-	return []string{
-		jsonName,
-		yamlName,
-		// nameName,
-		// goTemplateName,
-		// goTemplateFileName,
-		// templateName,
-		// templateFileName,
-		// jsonPathName,
-		// jsonPathFileName,
-	}
+var outputFormats = []string{
+	jsonName,
+	yamlName,
+	// nameName,
+	// goTemplateName,
+	// goTemplateFileName,
+	// templateName,
+	// templateFileName,
+	// jsonPathName,
+	// jsonPathFileName,
 }
 
-func getSecretNames() []string {
-	return []string{
-		dockerRegistryCmdName,
-		genericCmdName,
-		tlsCmdName,
-	}
+var secretNames = []string{
+	dockerRegistryCmdName,
+	genericCmdName,
+	tlsCmdName,
+}
+
+var seviceNames = []string{
+	clusterIPCmdName,
+	externalNameCmdName,
+	loadbalancerCmdName,
+	nodePortCmdName,
 }
